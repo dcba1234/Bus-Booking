@@ -1,0 +1,37 @@
+<form nz-form [nzLayout]="'vertical'">
+    <div nz-row>
+      <div nz-col nzSpan="11">
+        <nz-form-item>
+          <nz-form-label>Name</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="userName"  placeholder="" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="11" nzOffset="2">
+        <nz-form-item>
+          <nz-form-label>Class</nz-form-label>
+          <nz-form-control>
+            <input nz-input  placeholder="" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  
+    <div nz-row>
+      <nz-form-item>
+        <nz-form-label>Interests</nz-form-label>
+        <nz-form-control>
+          <textarea rows="4" nz-input></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-row>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button nzType="primary">Submit</button>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+  

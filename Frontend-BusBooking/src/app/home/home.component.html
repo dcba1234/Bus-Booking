@@ -1,0 +1,29 @@
+
+<nz-table #basicTable nzBordered [nzData]="listOfData">
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>First Name</th>
+      <th>Email</th>
+      <th>Gender</th>
+      <th>Salary</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>{{ data.firstName }}</td>
+      <td>{{ data.email }}</td>
+      <td>{{ data.gender }}</td>
+      <td>{{ data.salary }}</td>
+      <td>
+        <a (click)="navigateUser(data.id)">Detail</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a>Delete</a>
+    
+       
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

@@ -1,0 +1,30 @@
+
+<nz-table #basicTable nzBordered [nzData]="dataSource">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Number</th>
+        <th>Driver</th>
+        <th>Contact</th>
+        <th>Bus Type</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.Number }}</td>
+        <td>{{ data.driverName }}</td>
+        <td>{{ data.driverPhoneNumber }}</td>
+        <td>{{ data.busType }}</td>
+        <td>
+          <a (click)="navigateUser(data.id)">Detail</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a>Delete</a>
+      
+         
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  
