@@ -1,4 +1,3 @@
-import { CommonService } from './common.service';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -12,19 +11,18 @@ import { registerLocaleData } from '@angular/common';
 import { HomeComponent } from './home/home.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserDetailComponent } from './user-detail/user-detail.component';
-import { UserService } from './user.service';
 import { BusComponentComponent } from './bus-component/bus-component.component';
 import { BusTypeComponent } from './bus-type/bus-type.component';
+import { DriverComponent } from './driver/driver.component';
 
 registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    UserDetailComponent,
     BusComponentComponent,
-    BusTypeComponent
+    BusTypeComponent,
+    DriverComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +35,7 @@ registerLocaleData(en);
     ReactiveFormsModule
   ],
   providers: [
-    { provide: NZ_I18N, useValue: en_US }, CommonService, UserService
+    { provide: NZ_I18N, useValue: en_US }
   ],
   bootstrap: [AppComponent]
 })

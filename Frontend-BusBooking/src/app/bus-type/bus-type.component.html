@@ -19,8 +19,8 @@
       <td>{{ data.Name }}</td>
       <td>{{ data.SeatNumber }}</td>
       <td>
-        <!-- <a (click)="navigateUser(data.id)">Detail</a>
-        <nz-divider nzType="vertical"></nz-divider> -->
+        <a (click)="Edit(data)">Edit</a>
+        <nz-divider nzType="vertical"></nz-divider>
         <a (click)="showDeleteConfirm(data.Id)">Delete</a>
       </td>
     </tr>
@@ -30,7 +30,7 @@
 <nz-modal
   [nzFooter]="modalFooter"
   [(nzVisible)]="isVisible"
-  nzTitle="Create Bus Type"
+  nzTitle="Bus Type"
   (nzOnCancel)="handleCancel()"
   (nzOnOk)="handleOk()"
 >
@@ -77,7 +77,7 @@
         type="submit"
         (click)="submitForm()"
       >
-        Create
+        Save
       </button>
     </ng-template>
   </form>

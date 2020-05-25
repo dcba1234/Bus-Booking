@@ -1,8 +1,7 @@
 import { BusService } from './../service/bus.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonService } from '../common.service';
-import { UserService } from '../user.service';
+import { CommonService } from '../service/common/common.service';
 
 @Component({
   selector: 'app-bus-component',

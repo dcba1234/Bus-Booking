@@ -14,7 +14,10 @@ export class BusTypeService {
     return this.http.get<any>(`${ApiUrl}/bus-type`).toPromise();
   }
 
-  saveItem(data) {
+  saveItem(data, Id?) {
+    if (Id) {
+      return this.http.put<any>(`${ApiUrl}/bus-type`, data, { params: { Id } }).toPromise();
+    }
     return this.http.post<any>(`${ApiUrl}/bus-type`, data).toPromise();
   }
 

@@ -1,9 +1,10 @@
 import { BusTypeService } from './../service/bus-type.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonService } from '../common.service';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd';
+import { CommonService } from '../service/common/common.service';
 
 @Component({
   selector: 'app-bus-type',
@@ -12,6 +13,7 @@ import { NzModalService } from 'ng-zorro-antd';
 })
 export class BusTypeComponent implements OnInit {
   dataSource = [];
+  typeId = null;
   isVisible = false;
   isLoading = true;
   rfBusType: FormGroup;
@@ -37,11 +39,15 @@ export class BusTypeComponent implements OnInit {
     this.isLoading = false;
   }
 
-  navigateUser(id) {
-
+  Edit(data) {
+    this.isVisible = true;
+    this.rfBusType.patchValue(data);
+    this.typeId = data.Id;
   }
 
   addData() {
+    this.rfBusType.reset();
+    this.typeId = null;
     this.isVisible = true;
     // this.busTypeSvc.saveItem({ Name: 'test', SeatNumber: 200 });
   }
@@ -66,7 +72,7 @@ export class BusTypeComponent implements OnInit {
     if (this.rfBusType.valid) {
       this.isVisible = false;
       this.isLoading = true;
-      await this.busTypeSvc.saveItem(this.rfBusType.value);
+      await this.busTypeSvc.saveItem(this.rfBusType.value, this.typeId);
       this.loadData();
     }
   }

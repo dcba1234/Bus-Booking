@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "startb": "cd Backend-BusBooking && npm start",
-    "startf": "cd BusBooking && npm start"
+    "startf": "cd Frontend-BusBooking && npm start"
   },
   "private": true
   
