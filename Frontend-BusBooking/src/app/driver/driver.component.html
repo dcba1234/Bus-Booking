@@ -1,95 +1,131 @@
 <div class="type_action">
-    <button nz-button (click)="addData()">
-      <i nz-icon nzType="plus" nzTheme="outline"></i>Add
-    </button>
-    <br />
-  </div>
-  <nz-table [nzLoading]="isLoading" #basicTable nzBordered [nzData]="dataSource">
-    <thead>
-      <tr>
-        <th>STT</th>
-        <th>Name</th>
-        <th>Account</th>
-        <th>BirthDay</th>
-        <th>Gender</th>
-        <th>PhoneNumber</th>
-        <th>RouteResgisterId</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of basicTable.data; index as i">
-        <td>{{ i + 1 }}</td>
-        <td>{{ data.Name }}</td>
-        <td>{{ data.Account }}</td>
-        <td>{{ data.BirthDay | date }}</td>
-        <td>{{ data.Gender }}</td>
-        <td>{{ data.PhoneNumber }}</td>
-        <td>{{ data.RouteResgisterId }}</td>
-        <td>
-          <a (click)="Edit(data)">Edit</a>
-          <nz-divider nzType="vertical"></nz-divider>
-          <a (click)="showDeleteConfirm(data.Id)">Delete</a>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
-  
-  <nz-modal
-    [nzFooter]="modalFooter"
-    [(nzVisible)]="isVisible"
-    nzTitle="Bus Type"
-    (nzOnCancel)="handleCancel()"
-    (nzOnOk)="handleOk()"
+  <button nz-button (click)="addData()">
+    <i nz-icon nzType="plus" nzTheme="outline"></i>Add
+  </button>
+  <br />
+</div>
+<nz-table [nzLoading]="isLoading" #basicTable nzBordered [nzData]="dataSource">
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>Name</th>
+      <th>Account</th>
+      <th>BirthDay</th>
+      <th>Gender</th>
+      <th>PhoneNumber</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>{{ data.Name }}</td>
+      <td>{{ data.Account }}</td>
+      <td>{{ data.BirthDay | date }}</td>
+      <td>{{ data.Gender }}</td>
+      <td>{{ data.PhoneNumber }}</td>
+      <td>
+        <a (click)="Edit(data)">Edit</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)="showDeleteConfirm(data.Id)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [nzFooter]="modalFooter"
+  [(nzVisible)]="isVisible"
+  nzTitle="Bus Type"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <form
+    nz-form
+    [formGroup]="rfDriver"
+    class="login-form"
+    (ngSubmit)="submitForm()"
   >
-    <form
-      nz-form
-      [formGroup]="rfDriver"
-      class="login-form"
-      (ngSubmit)="submitForm()"
-    >
-      <nz-form-item>
-        <nz-form-control nzErrorTip="Please input type!">
-          <nz-input-group nzPrefixIcon="user">
-            <input
-              type="text"
-              nz-input
-              formControlName="Name"
-              placeholder="Name"
-            />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control nzErrorTip="Please input seat number!">
-          <nz-input-group nzPrefixIcon="lock">
-            <input
-              type="number"
-              nz-input
-              formControlName="SeatNumber"
-              placeholder="Seat Number"
-            />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-  
-      <ng-template #modalFooter>
-        <button nz-button nzType="default" (click)="handleCancel()">
-          Cancel
-        </button>
-  
-        <button
-          nz-button
-          class="login-form-button login-form-margin"
-          [nzType]="'primary'"
-          type="submit"
-          (click)="submitForm()"
-        >
-          Save
-        </button>
-      </ng-template>
-    </form>
-  
-    
-  </nz-modal>
-  
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Name</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input name!">
+        <input type="text" nz-input formControlName="Name" placeholder="Name" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Account</nz-form-label>
+      <nz-form-control
+        [nzSm]="14"
+        [nzXs]="24"
+        nzErrorTip="Please input account!"
+      >
+        <input
+          type="text"
+          nz-input
+          formControlName="Account"
+          placeholder="Account"
+        />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>BirthDay</nz-form-label>
+      <nz-form-control
+        nzErrorTip="Please input birthDay!"
+        [nzSm]="14"
+        [nzXs]="24"
+      >
+        <nz-date-picker
+          formControlName="BirthDay"
+          style="width: 100% !important;"
+          placeholder="BirthDay"
+        ></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Gender</nz-form-label>
+      <nz-form-control
+        nzErrorTip="Please input gender!"
+        [nzSm]="14"
+        [nzXs]="24"
+      >
+        <nz-select formControlName="Gender" class="gender-select">
+          <nz-option nzLabel="Male" nzValue="Male"></nz-option>
+          <nz-option nzLabel="Female" nzValue="Female"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Phone Number</nz-form-label>
+      <nz-form-control
+        [nzSm]="14"
+        [nzXs]="24"
+        nzErrorTip="Please input phone number!"
+      >
+        <input
+          type="text"
+          nz-input
+          formControlName="PhoneNumber"
+          placeholder="PhoneNumber"
+        />
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #modalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">
+        Cancel
+      </button>
+
+      <button
+        nz-button
+        class="login-form-button login-form-margin"
+        [nzType]="'primary'"
+        type="submit"
+        (click)="submitForm()"
+      >
+        Save
+      </button>
+    </ng-template>
+  </form>
+</nz-modal>

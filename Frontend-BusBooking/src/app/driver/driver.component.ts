@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DriverService } from './../service/driver.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from '../service/common/common.service';
@@ -13,9 +13,17 @@ export class DriverComponent implements OnInit {
   isLoading = true;
   dataSource = [];
   rfDriver: FormGroup;
-  constructor(public commonService: CommonService,private driverSvc: DriverService ) {
+  constructor(public commonService: CommonService, private driverSvc: DriverService, private fb: FormBuilder) {
     commonService.routerTitle = [{ title: 'Home', url: '' }, { title: 'Driver Manager', url: '' }];
     commonService.title = 'Driver Manager';
+    this.rfDriver =  this.fb.group({
+      Name: ['', [Validators.required]],
+      Account: ['', [Validators.required]],
+      BirthDay: ['', [Validators.required]],
+      Gender: ['', [Validators.required]],
+      PhoneNumber: ['', [Validators.required]],
+
+    });
   }
 
   ngOnInit(): void {
@@ -35,10 +43,10 @@ export class DriverComponent implements OnInit {
   }
 
   addData() {
-    // this.rfBusType.reset();
+    this.rfDriver.reset();
     // this.typeId = null;
-    // this.isVisible = true;
-    // this.busTypeSvc.saveItem({ Name: 'test', SeatNumber: 200 });
+    this.isVisible = true;
+
   }
 
   handleOk(): void {
@@ -52,11 +60,14 @@ export class DriverComponent implements OnInit {
   }
 
   async submitForm() {
-
-    // for (const i of Object.keys(this.rfBusType.controls)) {
-    //   this.rfBusType.controls[i].markAsDirty();
-    //   this.rfBusType.controls[i].updateValueAndValidity();
-    // }
+    
+    const value = {...this.rfDriver.value};
+    value.BirthDay = new Date(value.BirthDay).toISOString();
+    console.log(value)
+    for (const i of Object.keys(this.rfDriver.controls)) {
+      this.rfDriver.controls[i].markAsDirty();
+      this.rfDriver.controls[i].updateValueAndValidity();
+    }
 
     // if (this.rfBusType.valid) {
     //   this.isVisible = false;
