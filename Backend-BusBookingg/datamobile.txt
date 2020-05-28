@@ -1,0 +1,51 @@
+create table Jobs (
+ Id INT NOT NULL AUTO_INCREMENT,
+   Namejobs VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY(Id),
+);
+
+
+create table Department(
+ Id INT NOT NULL AUTO_INCREMENT,
+   Namedepartment VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY(Id),
+);
+
+create table employees (
+ Id INT NOT NULL AUTO_INCREMENT,
+   Name VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+   Phone VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+   Adress VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+   Adressmail VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+   Image VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+   Birthday DATETIME,
+   Id_jobs Int,
+   Id_department INT,
+   Postion VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+   PRIMARY KEY ( Id),
+   FOREIGN KEY (Id_jobs) REFERENCES Jobs(Id)
+  FOREIGN KEY (Id_department) REFERENCES Department(Id)
+);
+
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS getById $$
+CREATE PROCEDURE getById(IN Id INT(11))
+BEGIN
+SELECT employees.Id, Name,Phone,Adress,Adressmail,Postion,Image, Department.Namedepartment, jobs.Namejobs 
+FROM  employees
+    LEFT JOIN jobs ON Jobs.Id = employees.Id_jobs 
+    LEFT JOIN  department on  Department.Id =employees.Id_department
+WHERE employees.Id = Id;
+END; $$
+
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS getdepartmentById $$
+CREATE PROCEDURE getdepartmentById (IN Id INT(11))
+BEGIN
+SELECT employees.Id, Name,Phone,Adress,Adressmail,Postion,Image, Department.Namedepartment
+FROM  department 
+   LEFT JOIN  employees  on  Department.Id = employees.Id_department
+WHERE department.Id = Id;
+END; $$
