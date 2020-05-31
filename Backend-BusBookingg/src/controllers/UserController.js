@@ -76,7 +76,7 @@ module.exports = {
 
 
 const checkIfExistAccount(Id){
-  let sql = `DELETE FROM ${table} WHERE Id = ?`;
+  let sql = `select count(Id) from ${table} where user.Name = ?`;
   db.query(sql, [data.id], (err, response) => {
     if (err) throw err;
     res.json(req.params);
