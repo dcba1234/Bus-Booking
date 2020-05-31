@@ -35,7 +35,12 @@ module.exports = {
     });
   },
   store: (req, res) => {
+    
     let data = req.body;
+    if(data.Name.trim() == 0) {
+      res.json({error: 'Tên không hợp lệ'})
+      return;
+    }
     let sql = `INSERT INTO ${table} SET ?`;
     console.log(data)
     db.query(sql, [data], (err, response) => {

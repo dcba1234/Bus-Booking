@@ -5,6 +5,8 @@
     "startb": "cd Backend-BusBookingg && npm start",
     "startf": "cd Frontend-BusBooking && npm start"
   },
-  "private": true
-  
+  "private": true,
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
 }

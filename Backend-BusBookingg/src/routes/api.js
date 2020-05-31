@@ -25,6 +25,9 @@ let initAPIs = (app) => {
 
   //driver
   router.get("/driver", UserController.getDriver)
+  router.post("/driver", UserController.storeDriver)
+  router.put("/driver/:id", UserController.updateDriver)
+  router.delete("/driver/:id", UserController.delete)
 
   router.post("/login", AuthController.login);
   router.post("/refresh-token", AuthController.refreshToken);

@@ -2,27 +2,36 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DriverService } from './../service/driver.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from '../service/common/common.service';
+import { NzModalService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-driver',
   templateUrl: './driver.component.html',
-  styleUrls: ['./driver.component.scss']
+  styleUrls: ['./driver.component.scss'],
 })
 export class DriverComponent implements OnInit {
   isVisible = false;
   isLoading = true;
+  Id;
   dataSource = [];
   rfDriver: FormGroup;
-  constructor(public commonService: CommonService, private driverSvc: DriverService, private fb: FormBuilder) {
-    commonService.routerTitle = [{ title: 'Home', url: '' }, { title: 'Driver Manager', url: '' }];
+  constructor(
+    public commonService: CommonService,
+    private driverSvc: DriverService,
+    private fb: FormBuilder,
+    private modal: NzModalService
+  ) {
+    commonService.routerTitle = [
+      { title: 'Home', url: '' },
+      { title: 'Driver Manager', url: '' },
+    ];
     commonService.title = 'Driver Manager';
-    this.rfDriver =  this.fb.group({
+    this.rfDriver = this.fb.group({
       Name: ['', [Validators.required]],
       Account: ['', [Validators.required]],
       BirthDay: ['', [Validators.required]],
       Gender: ['', [Validators.required]],
       PhoneNumber: ['', [Validators.required]],
-
     });
   }
 
@@ -37,16 +46,15 @@ export class DriverComponent implements OnInit {
   }
 
   Edit(data) {
-    // this.isVisible = true;
-    // this.rfBusType.patchValue(data);
-    // this.typeId = data.Id;
+    this.isVisible = true;
+    this.rfDriver.patchValue(data);
+    this.Id = data.Id;
   }
 
   addData() {
     this.rfDriver.reset();
-    // this.typeId = null;
+    this.Id = null;
     this.isVisible = true;
-
   }
 
   handleOk(): void {
@@ -60,37 +68,36 @@ export class DriverComponent implements OnInit {
   }
 
   async submitForm() {
-    
-    const value = {...this.rfDriver.value};
+    const value = { ...this.rfDriver.value };
     value.BirthDay = new Date(value.BirthDay).toISOString();
-    console.log(value)
+    console.log(value);
     for (const i of Object.keys(this.rfDriver.controls)) {
       this.rfDriver.controls[i].markAsDirty();
       this.rfDriver.controls[i].updateValueAndValidity();
     }
 
-    // if (this.rfBusType.valid) {
-    //   this.isVisible = false;
-    //   this.isLoading = true;
-    //   await this.busTypeSvc.saveItem(this.rfBusType.value, this.typeId);
-    //   this.loadData();
-    // }
+    if (this.rfDriver.valid) {
+
+      this.isLoading = true;
+      await this.driverSvc.saveItem(this.rfDriver.value, this.Id);
+      this.isVisible = false;
+      this.loadData();
+    }
   }
 
   showDeleteConfirm(id): void {
-    // this.modal.confirm({
-    //   nzTitle: 'Are you sure delete this type?',
-    //   nzContent: '<b style="color: red;"></b>',
-    //   nzOkText: 'Yes',
-    //   nzOkType: 'danger',
-    //   nzOnOk: async () => {
-    //     this.isLoading = true;
-    //     await this.busTypeSvc.deleteItem(id);
-    //     this.loadData();
-    //   },
-    //   nzCancelText: 'No',
-    //   nzOnCancel: () => console.log('Cancel')
-    // });
+    this.modal.confirm({
+      nzTitle: 'Are you sure delete this type?',
+      nzContent: '<b style="color: red;"></b>',
+      nzOkText: 'Yes',
+      nzOkType: 'danger',
+      nzOnOk: async () => {
+        this.isLoading = true;
+        await this.driverSvc.deleteItem(id);
+        this.loadData();
+      },
+      nzCancelText: 'No',
+      nzOnCancel: () => { },
+    });
   }
-
 }

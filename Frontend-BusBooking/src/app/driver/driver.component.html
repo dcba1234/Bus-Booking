@@ -113,11 +113,12 @@
     </nz-form-item>
 
     <ng-template #modalFooter>
-      <button nz-button nzType="default" (click)="handleCancel()">
+      <button [nzLoading] = "isLoading" nz-button nzType="default" (click)="handleCancel()">
         Cancel
       </button>
 
       <button
+        [nzLoading] = "isLoading"
         nz-button
         class="login-form-button login-form-margin"
         [nzType]="'primary'"
