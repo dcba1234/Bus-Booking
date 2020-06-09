@@ -1,8 +1,9 @@
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, ValidationErrors } from '@angular/forms';
 import { DriverService } from './../service/driver.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from '../service/common/common.service';
 import { NzModalService } from 'ng-zorro-antd';
+import { Observable, Observer } from 'rxjs';
 
 @Component({
   selector: 'app-driver',
@@ -79,9 +80,16 @@ export class DriverComponent implements OnInit {
     if (this.rfDriver.valid) {
 
       this.isLoading = true;
-      await this.driverSvc.saveItem(this.rfDriver.value, this.Id);
-      this.isVisible = false;
-      this.loadData();
+      try {
+        await this.driverSvc.saveItem(this.rfDriver.value, this.Id);
+        this.isVisible = false;
+        this.loadData();
+      } catch (error) {
+        console.log(error.error);
+        this.isLoading = false;
+        this.rfDriver.controls.Account.setErrors({ notUnique: true });
+      }
+
     }
   }
 
@@ -100,4 +108,19 @@ export class DriverComponent implements OnInit {
       nzOnCancel: () => { },
     });
   }
+
+  userNameAsyncValidator = (control: FormControl) =>
+    new Observable((observer: Observer<ValidationErrors | null>) => {
+      setTimeout(() => {
+        if (control.value === 'JasonWood') {
+          // you have to return `{error: true}` to mark it as an error event
+          observer.next({ error: true, duplicated: true });
+        } else {
+          observer.next(null);
+        }
+        observer.complete();
+      }, 1000);
+    })
+
+
 }

@@ -10,13 +10,17 @@ const FriendController = require("../controllers/FriendController");
 const BusController = require("../controllers/BusController");
 const BusTypeController = require("../controllers/BusTypeController");
 const UserController = require("../controllers/UserController");
+const LocateController = require("../controllers/LocationController");
 /**
  * Init all APIs on your application
  * @param {*} app from express
  */
 let initAPIs = (app) => {
   router.get("/bus", BusController.get)
+  router.post("/bus", BusController.store)
+  router.put("/bus/:number", BusController.update)
   router.get("/bus/:number", BusController.getBusByNumber)
+  router.delete("/bus/:Id", BusController.delete)
 
   router.get("/bus-type", BusTypeController.get)
   router.post("/bus-type", BusTypeController.store)
@@ -29,6 +33,12 @@ let initAPIs = (app) => {
   router.put("/driver/:id", UserController.updateDriver)
   router.delete("/driver/:id", UserController.delete)
 
+  //locate
+  router.get("/locate", LocateController.get)
+  router.put("/locate/:id", LocateController.update)
+  router.post("/locate", LocateController.store)
+  router.delete("/locate/:id", LocateController.delete)
+  // end region
   router.post("/login", AuthController.login);
   router.post("/refresh-token", AuthController.refreshToken);
   router.get("/friends", FriendController.friendLists);

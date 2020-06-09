@@ -23,6 +23,15 @@ module.exports = {
       res.json(response);
     });
   },
+
+  authentication: (req, res) => {
+    let sql = `select result from ${table} where Account = ? and Id <> ?`;
+    db.query(sql, (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
+
   getDriverById: (req, res) => {
     if (req.params.id) {
       let sql = getAll + " and Id = ?";
@@ -33,11 +42,14 @@ module.exports = {
     } else res.json("không có dữ liệu");
   },
   
-  updateDriver: (req, res) => {
-    res.status(409).json({error: 'Tên không hợp lệ'})
-    return
+  updateDriver: async (req, res) => {
     let data = req.body;
     let Id = req.params.id;
+    const rs = await checkIfExistAccount(req.body.Account, Id)
+    if(rs != 0){
+      res.status(401).send('This account is already exist')
+      return
+    }
     if(data.Name.trim() == 0 || data.Account.trim() == 0) {
       res.json({error: 'Tên không hợp lệ'})
       return;
@@ -48,9 +60,13 @@ module.exports = {
       res.json({ message: "Cập nhật thành công !" });
     });
   },
-  storeDriver: (req, res) => {
+  storeDriver: async (req, res) => {
       // just Name , account, birthday,gender, phonenumber
-
+      const rs = await checkIfExistAccount(req.body.Account)
+      if(rs != 0){
+        res.status(401).send('This account is already exist')
+        return
+      }
     let data = _.pick(req.body,['Account','Name','BirthDay','Gender','PhoneNumber']) ;
     if(data.Name.trim() == 0 || data.Account.trim() == 0) {
       res.json({error: 'Tên không hợp lệ'})
@@ -72,13 +88,14 @@ module.exports = {
       res.json(req.params);
     });
   }
+  
 };
 
-
-const checkIfExistAccount(Id){
-  let sql = `select count(Id) from ${table} where user.Name = ?`;
-  db.query(sql, [data.id], (err, response) => {
+const checkIfExistAccount = async (account,Id = 0) => new Promise((resolve, reject) => {
+  let sql = `select count(Id) as result from ${table} where Account = ? and Id <> ?`;
+  db.query(sql, [account,Id], (err, response) => {
     if (err) throw err;
-    res.json(req.params);
+    resolve(response[0].result)
   });
-}
+})
+

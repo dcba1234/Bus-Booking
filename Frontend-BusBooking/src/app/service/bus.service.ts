@@ -12,4 +12,19 @@ export class BusService {
   getAll(): any {
     return this.http.get<any>(`${ApiUrl}/bus`).toPromise();
   }
+
+  saveItem(data, Id): any {
+    if (Id) {
+      return this.http
+        .put<any>(`${ApiUrl}/bus/${Id}`, data)
+        .toPromise();
+    }
+    return this.http.post<any>(`${ApiUrl}/bus`, data).toPromise();
+  }
+
+  deleteItem(Id) {
+    return this.http
+    .delete<any>(`${ApiUrl}/bus/${Id}`)
+    .toPromise();
+  }
 }

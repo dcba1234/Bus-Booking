@@ -33,19 +33,9 @@
   </tbody>
 </nz-table>
 
-<nz-modal
-  [nzFooter]="modalFooter"
-  [(nzVisible)]="isVisible"
-  nzTitle="Bus Type"
-  (nzOnCancel)="handleCancel()"
-  (nzOnOk)="handleOk()"
->
-  <form
-    nz-form
-    [formGroup]="rfDriver"
-    class="login-form"
-    (ngSubmit)="submitForm()"
-  >
+<nz-modal [nzFooter]="modalFooter" [(nzVisible)]="isVisible" nzTitle="Bus Type" (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()">
+  <form nz-form [formGroup]="rfDriver" class="login-form" (ngSubmit)="submitForm()">
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Name</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input name!">
@@ -53,42 +43,31 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Account</nz-form-label>
-      <nz-form-control
-        [nzSm]="14"
-        [nzXs]="24"
-        nzErrorTip="Please input account!"
-      >
-        <input
-          type="text"
-          nz-input
-          formControlName="Account"
-          placeholder="Account"
-        />
+      <nz-form-label [nzSm]="6" [nzXs]="24">Account</nz-form-label>
+      <nz-form-control nzHasFeedback [nzSm]="14" [nzXs]="24" nzValidatingTip="Validating..."
+        [nzErrorTip]="accountError">
+        <input type="text" nz-input formControlName="Account" placeholder="Account" />
+        <ng-template #accountError let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            Please input your account!
+          </ng-container>
+          <ng-container *ngIf="control.hasError('notUnique')">
+            This account is already exist
+          </ng-container>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>BirthDay</nz-form-label>
-      <nz-form-control
-        nzErrorTip="Please input birthDay!"
-        [nzSm]="14"
-        [nzXs]="24"
-      >
-        <nz-date-picker
-          formControlName="BirthDay"
-          style="width: 100% !important;"
-          placeholder="BirthDay"
-        ></nz-date-picker>
+      <nz-form-control nzErrorTip="Please input birthDay!" [nzSm]="14" [nzXs]="24">
+        <nz-date-picker formControlName="BirthDay" style="width: 100% !important;" placeholder="BirthDay">
+        </nz-date-picker>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Gender</nz-form-label>
-      <nz-form-control
-        nzErrorTip="Please input gender!"
-        [nzSm]="14"
-        [nzXs]="24"
-      >
+      <nz-form-control nzErrorTip="Please input gender!" [nzSm]="14" [nzXs]="24">
         <nz-select formControlName="Gender" class="gender-select">
           <nz-option nzLabel="Male" nzValue="Male"></nz-option>
           <nz-option nzLabel="Female" nzValue="Female"></nz-option>
@@ -98,33 +77,18 @@
 
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Phone Number</nz-form-label>
-      <nz-form-control
-        [nzSm]="14"
-        [nzXs]="24"
-        nzErrorTip="Please input phone number!"
-      >
-        <input
-          type="text"
-          nz-input
-          formControlName="PhoneNumber"
-          placeholder="PhoneNumber"
-        />
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input phone number!">
+        <input type="text" nz-input formControlName="PhoneNumber" placeholder="PhoneNumber" />
       </nz-form-control>
     </nz-form-item>
 
     <ng-template #modalFooter>
-      <button [nzLoading] = "isLoading" nz-button nzType="default" (click)="handleCancel()">
+      <button [nzLoading]="isLoading" nz-button nzType="default" (click)="handleCancel()">
         Cancel
       </button>
 
-      <button
-        [nzLoading] = "isLoading"
-        nz-button
-        class="login-form-button login-form-margin"
-        [nzType]="'primary'"
-        type="submit"
-        (click)="submitForm()"
-      >
+      <button [nzLoading]="isLoading" nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+        type="submit" [disabled]="!rfDriver.valid" (click)="submitForm()">
         Save
       </button>
     </ng-template>

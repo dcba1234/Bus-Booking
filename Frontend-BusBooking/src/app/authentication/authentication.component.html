@@ -1,0 +1,37 @@
+
+
+<div class="authen-content">
+  <div class="authen-form">
+
+    <form nz-form [formGroup]="rfValidateForm" class="login-form" (ngSubmit)="submitForm()">
+      <h1>Sign In</h1>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your username!">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="userName" placeholder="Username" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="accountError">
+          <nz-input-group nzPrefixIcon="lock">
+            <input type="password" nz-input formControlName="password" placeholder="Password" />
+            <ng-template #accountError let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Please input your account!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('authen')">
+                Wrong account or password
+              </ng-container>
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <button [nzLoading]="isLoading" nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
+
+    </form>
+
+  </div>
+</div>
+

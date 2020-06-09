@@ -14,7 +14,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BusComponentComponent } from './bus-component/bus-component.component';
 import { BusTypeComponent } from './bus-type/bus-type.component';
 import { DriverComponent } from './driver/driver.component';
-
+import { AuthenticationComponent } from './authentication/authentication.component';
+import { BusRouteComponent } from './bus-route/bus-route.component';
+import { LocationComponent } from './location/location.component';
+import { AgmCoreModule } from '@agm/core';
 registerLocaleData(en);
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ registerLocaleData(en);
     HomeComponent,
     BusComponentComponent,
     BusTypeComponent,
-    DriverComponent
+    DriverComponent,
+    AuthenticationComponent,
+    BusRouteComponent,
+    LocationComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +38,11 @@ registerLocaleData(en);
     HttpClientModule,
     NzBreadCrumbModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBFyIt14t7U7QrjC2gOZQ883t1zAS4K_SM',
+      libraries: ['places', 'geometry']
+  })
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }

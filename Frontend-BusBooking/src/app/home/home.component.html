@@ -1,29 +1,96 @@
+<div class="body">
+  <div>
+    <header style="
+        background: #fff;
+        box-shadow: 0 2px 8px #f0f1f2;
+        position: relative;
+        z-index: 10;
+        max-width: 100%;
+        height: 60px;
+        display: flex;
+        padding-left: 22px;
+        flex-direction: column;
+        justify-content: center;
+      " class="clearfix" id="header">
+      <div style="display: flex;">
+        <div>
+          <h2>Bus Booking</h2>
+        </div>
+        <div style="margin-left: auto; margin-right: 30px; display: flex;">
+          <div nz-dropdown [nzDropdownMenu]="menu">
+            <nz-avatar nzSize="large" nzIcon="user">
 
-<nz-table #basicTable nzBordered [nzData]="listOfData">
-  <thead>
-    <tr>
-      <th>STT</th>
-      <th>First Name</th>
-      <th>Email</th>
-      <th>Gender</th>
-      <th>Salary</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of basicTable.data; index as i">
-      <td>{{ i + 1 }}</td>
-      <td>{{ data.firstName }}</td>
-      <td>{{ data.email }}</td>
-      <td>{{ data.gender }}</td>
-      <td>{{ data.salary }}</td>
-      <td>
-        <a (click)="navigateUser(data.id)">Detail</a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <a>Delete</a>
-    
-       
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
+            </nz-avatar>
+          </div>
+          <span style="align-self: center;margin-left: 5px;"> Tiến Thành</span>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>1st menu item</li>
+              <li nz-menu-item>2nd menu item</li>
+              <li (click)="signOut()" nz-menu-item>Đăng xuất</li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+
+    </header>
+  </div>
+  <div>
+    <div nz-row>
+      <div style="height: 1000px; background-color: white;" nz-col nzSpan="4">
+        <ul nz-menu nzMode="inline">
+          <li routerLinkActive="ant-menu-item-selected" nz-menu-item nzTitle="Home" nzIcon="home">
+
+
+            <a [routerLink]="['home']"> <i nz-icon nzType="home"> </i>Home</a>
+
+          </li>
+
+          <li nz-submenu nzTitle="Setting" nzIcon="setting" nzOpen>
+            <ul>
+              <li routerLinkActive="ant-menu-item-selected" nz-menu-item>
+                <a [routerLink]="['bus']">
+                  Bus Manager
+                </a>
+              </li>
+              <li routerLinkActive="ant-menu-item-selected" nz-menu-item>
+                <a [routerLink]="['bus-type']">
+                  Bus Type Manager
+                </a>
+              </li>
+              <li routerLinkActive="ant-menu-item-selected" nz-menu-item>
+                <a [routerLink]="['driver']">
+                  Driver Manager
+                </a>
+              </li>
+              <li routerLinkActive="ant-menu-item-selected" nz-menu-item>
+                <a [routerLink]="['location']">
+                  Location Manager
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div nz-col nzSpan="20">
+        <div style="background-color: white;">
+          <nz-page-header nzTitle="{{ commonService.title }}">
+            <nz-breadcrumb nz-page-header-breadcrumb>
+              <nz-breadcrumb-item *ngFor="let item of commonService.routerTitle; index as i">
+                <a *ngIf="i < commonService.routerTitle.length - 1" routerLink="{{ item.url }}">{{ item.title }}</a>
+                <span *ngIf="i == commonService.routerTitle.length - 1">{{
+                  item.title
+                }}</span>
+              </nz-breadcrumb-item>
+            </nz-breadcrumb>
+          </nz-page-header>
+        </div>
+        <div class="content">
+         <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

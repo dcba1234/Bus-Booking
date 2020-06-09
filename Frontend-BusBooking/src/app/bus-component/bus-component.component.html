@@ -1,30 +1,85 @@
-
+<div class="type_action">
+  <button nz-button (click)="addData()">
+    <i nz-icon nzType="plus" nzTheme="outline"></i>Add
+  </button>
+  <br />
+</div>
 <nz-table #basicTable nzBordered [nzData]="dataSource">
-    <thead>
-      <tr>
-        <th>STT</th>
-        <th>Number</th>
-        <th>Driver</th>
-        <th>Contact</th>
-        <th>Bus Type</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of basicTable.data; index as i">
-        <td>{{ i + 1 }}</td>
-        <td>{{ data.Number }}</td>
-        <td>{{ data.driverName }}</td>
-        <td>{{ data.driverPhoneNumber }}</td>
-        <td>{{ data.busType }}</td>
-        <td>
-          <a (click)="navigateUser(data.id)">Detail</a>
-          <nz-divider nzType="vertical"></nz-divider>
-          <a>Delete</a>
-      
-         
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
-  
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>Number</th>
+      <th>Driver</th>
+      <th>Contact</th>
+      <th>Bus Type</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>{{ data.Number }}</td>
+      <td>{{ data.driverName }}</td>
+      <td>{{ data.driverPhoneNumber }}</td>
+      <td>{{ data.busType }}</td>
+      <td>
+        <a (click)="Edit(data)">Edit</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)="showDeleteConfirm(data.Id)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+
+<nz-modal [nzFooter]="modalFooter" [(nzVisible)]="isVisible" nzTitle="Bus Type" (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()">
+  <form nz-form [formGroup]="rfBus" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Number</nz-form-label>
+      <nz-form-control [nzErrorTip]="numberError" [nzSm]="14" [nzXs]="24" nzErrorTip="Please input number!">
+        <input type="text" nz-input formControlName="Number" placeholder="Number"  />
+        <ng-template #numberError let-control>
+          <ng-container *ngIf="control.hasError('required')">
+            Please input your account!
+          </ng-container>
+          <ng-container *ngIf="control.hasError('notUnique')">
+            This number is already exist
+          </ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Driver</nz-form-label>
+      <nz-form-control nzErrorTip="Please input driver!" [nzSm]="14" [nzXs]="24">
+        <nz-select formControlName="DriverId" class="gender-select">
+          <nz-option *ngFor="let item of drivers" nzLabel="{{item.Name}}  ({{item.Account}})" [nzValue]="item.Id"></nz-option>
+
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Type</nz-form-label>
+      <nz-form-control nzErrorTip="Please input driver!" [nzSm]="14" [nzXs]="24">
+        <nz-select formControlName="TypeId" class="gender-select">
+          <nz-option *ngFor="let item of types" nzLabel="{{item.Name}}" [nzValue]="item.Id"></nz-option>
+
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #modalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">
+        Cancel
+      </button>
+
+      <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'" type="submit"
+        (click)="submitForm()" [disabled]="!rfBus.valid" >
+        Save
+      </button>
+    </ng-template>
+  </form>
+
+
+</nz-modal>

@@ -1,6 +1,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonService } from '../service/common/common.service';
+import { AuthenticationService } from '../service/authentication.service';
 
 
 
@@ -11,8 +13,11 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
   listOfData = [];
-  constructor(private router: Router) {
-
+  constructor(private router: Router, public commonService: CommonService, private authenSvc: AuthenticationService) {
+    commonService.routerTitle = [
+      { title: '', url: '' }
+    ];
+    commonService.title = 'Home';
   }
 
   ngOnInit(): void {
@@ -22,5 +27,9 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/user', id]);
     console.log(id);
 
+  }
+  signOut() {
+    this.authenSvc.deleteToken();
+    this.router.navigateByUrl('sign-in');
   }
 }

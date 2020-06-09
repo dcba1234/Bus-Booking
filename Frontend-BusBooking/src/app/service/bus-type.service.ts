@@ -10,7 +10,7 @@ export class BusTypeService {
   constructor(private http: HttpClient) {
 
   }
-  getAll(): any {
+  getAll() {
     return this.http.get<any>(`${ApiUrl}/bus-type`).toPromise();
   }
 

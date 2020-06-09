@@ -1,0 +1,46 @@
+<div class="type_action">
+  <button nz-button (click)="addData()">
+    <i nz-icon nzType="plus" nzTheme="outline"></i>Add
+  </button>
+  <br />
+</div>
+<nz-table [nzLoading]="isLoading" #basicTable nzBordered [nzData]="dataSource">
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>Name</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>{{ data.Name }}</td>
+      <td>
+        <a (click)="Edit(data)">View Map</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)="Edit(data)">Edit</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)="showDeleteConfirm(data.Id)">Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal [nzFooter]="modalFooter" [(nzVisible)]="isVisible" nzTitle="Bus Type" (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()">
+  <form nz-form class="login-form" (ngSubmit)="submitForm()">
+    <agm-map></agm-map>
+
+    <ng-template #modalFooter>
+      <button [nzLoading]="isLoading" nz-button nzType="default" (click)="handleCancel()">
+        Cancel
+      </button>
+
+      <button [nzLoading]="isLoading" nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+        type="submit" (click)="submitForm()">
+        Save
+      </button>
+    </ng-template>
+  </form>
+</nz-modal>
