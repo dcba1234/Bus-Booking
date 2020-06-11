@@ -30,8 +30,11 @@
 <nz-modal [nzFooter]="modalFooter" [(nzVisible)]="isVisible" nzTitle="Bus Type" (nzOnCancel)="handleCancel()"
   (nzOnOk)="handleOk()">
   <form nz-form class="login-form" (ngSubmit)="submitForm()">
-    <agm-map></agm-map>
-
+    <div style="height: 400px; width: 100%"
+      leaflet
+      [leafletOptions]="options"
+     >
+    </div>
     <ng-template #modalFooter>
       <button [nzLoading]="isLoading" nz-button nzType="default" (click)="handleCancel()">
         Cancel

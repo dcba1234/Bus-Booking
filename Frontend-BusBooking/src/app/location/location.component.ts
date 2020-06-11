@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LocationService } from '../service/location.service';
 import { NzModalService } from 'ng-zorro-antd';
 import { CommonService } from '../service/common/common.service';
+import { tileLayer, latLng } from 'leaflet';
 
 @Component({
   selector: 'app-location',
@@ -12,6 +13,13 @@ export class LocationComponent implements OnInit {
   isVisible = false;
   isLoading = true;
   Id;
+  options = {
+    layers: [
+      tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
+    ],
+    zoom: 5,
+    center: latLng(46.879966, -121.726909)
+  };
   dataSource = [];
   constructor(public commonService: CommonService,
               private locateSvc: LocationService,
@@ -28,7 +36,7 @@ export class LocationComponent implements OnInit {
   }
   async loadData() {
     const data = await this.locateSvc.getAll();
-    console.log(data)
+    console.log(data);
     this.dataSource = data;
     this.isLoading = false;
   }

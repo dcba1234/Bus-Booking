@@ -18,6 +18,8 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 import { BusRouteComponent } from './bus-route/bus-route.component';
 import { LocationComponent } from './location/location.component';
 import { AgmCoreModule } from '@agm/core';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+
 registerLocaleData(en);
 @NgModule({
   declarations: [
@@ -39,10 +41,8 @@ registerLocaleData(en);
     NzBreadCrumbModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyBFyIt14t7U7QrjC2gOZQ883t1zAS4K_SM',
-      libraries: ['places', 'geometry']
-  })
+    LeafletModule
+
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US }
