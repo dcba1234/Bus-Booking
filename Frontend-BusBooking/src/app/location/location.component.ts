@@ -21,6 +21,7 @@ export class LocationComponent implements OnInit {
     center: latLng(46.879966, -121.726909)
   };
   dataSource = [];
+  location: Location;
   constructor(public commonService: CommonService,
               private locateSvc: LocationService,
               private modal: NzModalService) {
@@ -33,6 +34,10 @@ export class LocationComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.location = {
+      latitude: -28.68352,
+      longitude: -147.20785
+  }
   }
   async loadData() {
     const data = await this.locateSvc.getAll();

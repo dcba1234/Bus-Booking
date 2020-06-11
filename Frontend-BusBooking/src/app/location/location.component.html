@@ -27,7 +27,7 @@
   </tbody>
 </nz-table>
 
-<nz-modal [nzFooter]="modalFooter" [(nzVisible)]="isVisible" nzTitle="Bus Type" (nzOnCancel)="handleCancel()"
+<nz-modal nzWidth="700"  [nzFooter]="modalFooter" [(nzVisible)]="isVisible" nzTitle="Bus Type" (nzOnCancel)="handleCancel()"
   (nzOnOk)="handleOk()">
   <form nz-form class="login-form" (ngSubmit)="submitForm()">
     <div style="height: 400px; width: 100%"
@@ -45,5 +45,5 @@
         Save
       </button>
     </ng-template>
-  </form>
+  </div>
 </nz-modal>
