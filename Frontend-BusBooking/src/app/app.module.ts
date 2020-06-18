@@ -17,8 +17,9 @@ import { DriverComponent } from './driver/driver.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { BusRouteComponent } from './bus-route/bus-route.component';
 import { LocationComponent } from './location/location.component';
-import { AgmCoreModule } from '@agm/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { SendRequestComponent } from './send-request/send-request.component';
+
 
 registerLocaleData(en);
 @NgModule({
@@ -30,7 +31,8 @@ registerLocaleData(en);
     DriverComponent,
     AuthenticationComponent,
     BusRouteComponent,
-    LocationComponent
+    LocationComponent,
+    SendRequestComponent
   ],
   imports: [
     BrowserModule,

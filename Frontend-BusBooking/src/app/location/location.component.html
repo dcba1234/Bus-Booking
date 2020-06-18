@@ -26,22 +26,54 @@
     </tr>
   </tbody>
 </nz-table>
+<!-- <div class="map"
+     leaflet
+     (leafletMapReady)="onMapReady($event)"
+     [leafletOptions]="options"
+     [leafletLayersControl]="layersControl"></div> -->
 
-<nz-modal nzWidth="700"  [nzFooter]="modalFooter" [(nzVisible)]="isVisible" nzTitle="Bus Type" (nzOnCancel)="handleCancel()"
-  (nzOnOk)="handleOk()">
-  <form nz-form class="login-form" (ngSubmit)="submitForm()">
-    <div style="height: 400px; width: 100%"
+<nz-modal
+  nzWidth="700"
+  [nzFooter]="modalFooter"
+  [(nzVisible)]="isVisible"
+  nzTitle="Bus Locate"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+<input required nz-input [(ngModel)]="title" placeholder="Locate name" />
+<br><br>
+  <div class="login-form" (ngSubmit)="submitForm()">
+    <div
+      class="map"
       leaflet
+      (leafletMapReady)="onMapReady($event)"
+     
+      (leafletDoubleClick)="onMapdoubleClick($event)"
+      (leafletClick)="onMapClick($event)"
+      [(leafletCenter)]="mapCenter"
+      leafletZoom="15"
       [leafletOptions]="options"
-     >
-    </div>
+      [(leafletLayers)]="layers"
+    ></div>
+    <!-- [leafletLayersControl]="layersControl" -->
     <ng-template #modalFooter>
-      <button [nzLoading]="isLoading" nz-button nzType="default" (click)="handleCancel()">
+      <button
+        [nzLoading]="isLoading"
+        nz-button
+        nzType="default"
+        (click)="handleCancel()"
+      >
         Cancel
       </button>
 
-      <button [nzLoading]="isLoading" nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
-        type="submit" (click)="submitForm()">
+      <button
+        [nzLoading]="isLoading"
+        nz-button
+        class="login-form-button login-form-margin"
+        [nzType]="'primary'"
+        type="submit"
+        (click)="submitForm()"
+      >
         Save
       </button>
     </ng-template>

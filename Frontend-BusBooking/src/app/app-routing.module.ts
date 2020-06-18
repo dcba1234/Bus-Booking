@@ -1,3 +1,4 @@
+import { SendRequestComponent } from './send-request/send-request.component';
 import { DriverComponent } from './driver/driver.component';
 import { BusComponentComponent } from './bus-component/bus-component.component';
 import { HomeComponent } from './home/home.component';
@@ -13,10 +14,9 @@ const routes: Routes = [
   { path: '', redirectTo: 'sign-in', pathMatch: 'full' },
   {
     path: 'admin', canActivate: [AuthenGuard], children: [
-
-
       {
         path: '', component: HomeComponent, children: [
+          { path: 'home', component: SendRequestComponent },
           { path: 'bus', component: BusComponentComponent },
           { path: 'bus-type', component: BusTypeComponent },
           { path: 'driver', component: DriverComponent },

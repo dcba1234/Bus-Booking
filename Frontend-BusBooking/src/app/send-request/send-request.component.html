@@ -1,0 +1,57 @@
+<div>
+  <nz-collapse style="width: 60%; margin: auto;">
+    <nz-collapse-panel nzHeader="Book Route Bus" [nzActive]="true">
+      <form nz-form class="login-form">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired
+            >Route's name</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            nzErrorTip="Please input number!"
+          >
+            <input type="text" nz-input placeholder="Name" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired
+            >Pickup Location</nz-form-label
+          >
+          <nz-form-control
+            nzErrorTip="Please input driver!"
+            [nzSm]="14"
+            [nzXs]="24"
+          >
+            <nz-select
+              formControlName="DriverId"
+              nzPlaceHolder="Search by street, ward, district.."
+              class="gender-select"
+            >
+              <nz-option nzLabel="ádasd"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired
+            >Start/End Date</nz-form-label
+          >
+          <nz-form-control
+            nzErrorTip="Please input driver!"
+            [nzSm]="14"
+            [nzXs]="24"
+          >
+            <nz-range-picker></nz-range-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-row class="register-area">
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+            <button nz-button nzType="primary">Register</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
