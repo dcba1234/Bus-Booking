@@ -38,11 +38,13 @@ export class AuthenticationComponent implements OnInit {
       this.isLoading = true;
       try {
         const result = await this.authenSvc.login(this.rfValidateForm.value);
-        console.log(result);
         this.commonSvc.setLoading(false);
         this.isLoading = false;
         // navigate
         this.authenSvc.saveToStorage(result.accessToken);
+        this.authenSvc.setName(result.name);
+        console.log(result);
+        
         this.route.navigateByUrl('/admin/driver');
 
       } catch (error) {

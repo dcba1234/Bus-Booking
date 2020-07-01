@@ -6,7 +6,8 @@ let generateToken = (user, secretSignature, tokenLife) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-
+            account: user.Account,
+            isManager: user.isManager
         };
         jwt.sign(
             {data: userData},

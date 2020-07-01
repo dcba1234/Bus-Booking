@@ -13,9 +13,9 @@ module.exports = {
   get: (req, res) => {
     let sql = getAll;
     if (req.query.name) {
-      sql = getAll + " and Name = ?";
+      sql = getAll;
     }
-    db.query(sql, [req.query.name], (err, response) => {
+    db.query(sql, (err, response) => {
       if (err) throw err;
       console.log(response)
       res.json(response);

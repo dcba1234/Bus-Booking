@@ -1,1 +1,75 @@
-<p>bus-route works!</p>
+<div class="type_action">
+    <button nz-button (click)="addData()">
+      <i nz-icon nzType="plus" nzTheme="outline"></i>Add
+    </button>
+    <br />
+  </div>
+  <nz-table [nzLoading]="isLoading" #basicTable nzBordered [nzData]="dataDisplay">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th nzCustomFilter>
+          Name
+          <i
+            nz-th-extra
+            class="ant-table-filter-icon"
+            nz-icon
+            nz-dropdown
+            #dropdown="nzDropdown"
+            nzType="search"
+            [nzDropdownMenu]="menu"
+            [class.ant-table-filter-open]="dropdown.nzVisible"
+            nzTrigger="click"
+            nzPlacement="bottomRight"
+            [nzClickHide]="false"
+            nzTableFilter
+        ></i>
+        </th>
+        <th>Bus Number</th>
+        <th>Max seat</th>
+        <th>Driver</th>
+        <th>Start Locate</th>
+        <th>End Locate</th>
+        <th>Parking</th>
+        <th>Parking Fee</th>
+        <th>Departure Time</th>
+        <th>Arrive Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.Name }}
+           
+        </td>
+        <td>{{ data.busNumber }}</td>
+        <td>{{ data.maxSeat }}</td>
+        <td>{{ data.driverName }} ({{data.driverAccount}})</td>
+        <td>{{ data.FirstLocateName }}</td>
+        <td>{{ data.EndLocateName }}</td>
+        <td>{{ data.ParkingLot }}</td>
+        <td>{{ data.ParkingFee | currency:"VND":true }}</td>
+        <td>{{ data.DepartureTime | date:'HH:mm' }}</td>
+        <td>{{ data.ArriveTime | date:'HH:mm' }}</td>
+
+        <td>
+          <a (click)="Edit(data)">Edit</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a (click)="showDeleteConfirm(data.Id,data.IsEnable)">{{data.IsEnable == 0? 'Active' : 'Deactive'}}</a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+      <button nz-button nzSize="small" nzType="primary" (click)="searchName()" class="search-button">
+        Search
+      </button>
+      <button nz-button nzSize="small" (click)="resetsearchName()">Reset</button>
+    </div>
+  </nz-dropdown-menu>
+  
+  

@@ -1,5 +1,5 @@
 "use strict";
-
+const jwtHelper = require('../helpers/jwt.helper');
 const util = require("util");
 const mysql = require("mysql");
 const db = require("../helpers/db");
@@ -7,7 +7,8 @@ const _ = require("lodash")
 const table = "user";
 
 const getDriver = 'SELECT `Id`, `Account`, `Name`, `BirthDay`, `Gender`, `PhoneNumber`, `RouteResgisterId` FROM `user` where isDriver = 1'
-
+const refreshTokenSecret =
+  process.env.REFRESH_TOKEN_SECRET || "access-token-secret-tienthanh";
 module.exports = {
   get: (req, res) => {
     let sql = getAll;
@@ -36,6 +37,26 @@ module.exports = {
     if (req.params.id) {
       let sql = getAll + " and Id = ?";
       db.query(sql, [req.params.id], (err, response) => {
+        if (err) throw err;
+        res.json(response[0]);
+      });
+    } else res.json("không có dữ liệu");
+  },
+
+  getUserById: async (req, res) => {
+    const decoded = await jwtHelper.verifyToken(
+      req.headers.authtoken,
+      refreshTokenSecret
+    );
+    if(!decoded){
+      res.status(401).send("You need to authen");
+    }
+    const idUser = await decoded.data._id;
+    console.log(idUser);
+    
+    if (idUser) {
+      let sql = 'SELECT Account, Name, BirthDay, Gender, PhoneNumber, RouteResgisterId FROM user where Id = ?';
+      db.query(sql, [idUser], (err, response) => {
         if (err) throw err;
         res.json(response[0]);
       });

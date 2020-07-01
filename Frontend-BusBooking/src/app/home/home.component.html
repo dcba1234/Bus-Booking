@@ -22,7 +22,7 @@
 
             </nz-avatar>
           </div>
-          <span style="align-self: center;margin-left: 5px;"> Tiến Thành</span>
+          <span style="align-self: center;margin-left: 5px;"> {{userInfo}}</span>
 
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu nzSelectable>
@@ -40,7 +40,7 @@
     <div nz-row>
       <div style="height: 1000px; background-color: white;" nz-col nzSpan="4">
         <ul nz-menu nzMode="inline">
-          <li routerLinkActive="ant-menu-item-selected" nz-menu-item nzTitle="Home" nzIcon="home">
+          <li routerLinkActive="ant-menu-item-selected" nz-menu-item nzTitle="Home" >
 
 
             <a [routerLink]="['home']"> <i nz-icon nzType="home"> </i>Home</a>
@@ -49,6 +49,12 @@
 
           <li nz-submenu nzTitle="Setting" nzIcon="setting" nzOpen>
             <ul>
+              <!-- <i nz-icon nzType="unordered-list" nzTheme="outline"></i> -->
+              <li routerLinkActive="ant-menu-item-selected" nz-menu-item>
+                <a [routerLink]="['route']">
+                  Bus Route Manager
+                </a>
+              </li>
               <li routerLinkActive="ant-menu-item-selected" nz-menu-item>
                 <a [routerLink]="['bus']">
                   Bus Manager

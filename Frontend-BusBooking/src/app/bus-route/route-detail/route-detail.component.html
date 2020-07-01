@@ -1,0 +1,77 @@
+<form nz-form [formGroup]="rform" class="login-form" (ngSubmit)="submitForm()">
+    <div nz-row [nzGutter]="12">
+        <nz-form-item nz-col [nzSpan]="12">
+            <nz-form-label nzRequired [nzSm]="6" [nzXs]="24">Name</nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Please input name!">
+              <input type="text" nz-input formControlName="Name" placeholder="Name" />
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nz-col [nzSpan]="12">
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Bus</nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Please input bus!">
+                <nz-select formControlName="BusId">
+                    <nz-option *ngFor="let item of busData" [nzLabel]="item.Number+ ' - ' + item.busType" [nzValue]="item.Id"></nz-option>       
+                  </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+    </div>
+    <div nz-row [nzGutter]="12">
+        <nz-form-item nz-col [nzSpan]="12">
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Start Locate</nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Please input locate!">
+                <nz-select formControlName="FirstLocateId">
+                    <nz-option *ngFor="let item of locateData" [nzLabel]="item.Name" [nzValue]="item.Id"></nz-option>
+                  </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nz-col [nzSpan]="12">
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>End Locate</nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Please input locate!">
+                <nz-select formControlName="EndLocateId">
+                    <nz-option *ngFor="let item of locateData" [nzLabel]="item.Name" [nzValue]="item.Id"></nz-option>
+                  </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+    </div>
+
+    <div nz-row [nzGutter]="12">
+        <nz-form-item nz-col [nzSpan]="12">
+            <nz-form-label nzRequired [nzSm]="6" [nzXs]="24">Departure Time</nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Please input!">           
+              <nz-time-picker nzFormat="HH:mm" formControlName="DepartureTime"></nz-time-picker>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nz-col [nzSpan]="12"> 
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Arrive Time</nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Please input!">
+                <nz-time-picker nzFormat="HH:mm" formControlName="ArriveTime"></nz-time-picker>
+            </nz-form-control>
+          </nz-form-item>
+    </div>
+
+    <div nz-row [nzGutter]="12">
+        <nz-form-item nz-col [nzSpan]="12">
+            <nz-form-label nzRequired [nzSm]="6" [nzXs]="24">Parking lot</nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Please input!">
+              <textarea rows="4" nz-input formControlName="ParkingLot"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nz-col [nzSpan]="12">
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Parking Fee</nz-form-label>
+            <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Please input!">
+                <nz-input-number type="text" nz-input [nzMin]="1" formControlName="ParkingFee" placeholder="Parking Fee"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+    </div>
+    
+  
+    
+    <div nz-row [nzGutter]="12">
+        <nz-form-item class="register-area">
+            <nz-form-control [nzSpan]="24" [nzOffset]="3">
+              <button [nzLoading]="isLoading" nz-button nzType="primary">Save</button>
+            </nz-form-control>
+          </nz-form-item>
+     </div>  
+   
+  </form>

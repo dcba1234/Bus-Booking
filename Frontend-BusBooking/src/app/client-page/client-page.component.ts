@@ -1,29 +1,20 @@
-
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonService } from '../service/common/common.service';
 import { AuthenticationService } from '../service/authentication.service';
 
-
-
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-client-page',
+  templateUrl: './client-page.component.html',
+  styleUrls: ['./client-page.component.scss']
 })
-export class HomeComponent implements OnInit {
-  listOfData = [];
-  userInfo = '';
+export class ClientPageComponent implements OnInit {
+
   constructor(private router: Router, public commonService: CommonService, private authenSvc: AuthenticationService) {
     commonService.routerTitle = [
       { title: '', url: '' }
     ];
     commonService.title = 'Home';
-    console.log(this.authenSvc.userInfo);
-    
-    this.authenSvc.userInfo.subscribe((user) => {
-      this.userInfo = user.name;
-    });
   }
 
   ngOnInit(): void {
@@ -38,4 +29,5 @@ export class HomeComponent implements OnInit {
     this.authenSvc.deleteToken();
     this.router.navigateByUrl('sign-in');
   }
+
 }

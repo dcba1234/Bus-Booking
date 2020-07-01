@@ -29,7 +29,8 @@ const refreshTokenSecret =
 let login = async (req, res) => {
   try {
     let result = await loginSupport(req.body);
-
+    console.log(result);
+    
     if (!result) {
       console.log("error");
       res.status(401).send("Wrong account or password");
@@ -39,8 +40,10 @@ let login = async (req, res) => {
       _id: result.Id,
       name: result.Name,
       account: result.Account,
+      isManager: result.isManager
     };
-
+    console.log(userData);
+    
     const accessToken = await jwtHelper.generateToken(
       userData,
       accessTokenSecret,
@@ -59,7 +62,7 @@ let login = async (req, res) => {
     tokenList[refreshToken] = { accessToken, refreshToken };
 
     debug(`Gửi Token và Refresh Token về cho client...`);
-    return res.status(200).json({ accessToken, refreshToken });
+    return res.status(200).json({ accessToken, refreshToken, isManager: result.isManager, account: result.Account, name: result.Name });
   } catch (error) {
      return res.status(500).json(error);
   }

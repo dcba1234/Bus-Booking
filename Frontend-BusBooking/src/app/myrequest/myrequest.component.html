@@ -1,0 +1,37 @@
+<div style="display: flex; flex-direction: column;" class="type_action">
+  <h3>My Route: {{currentRoute && currentRoute.Name}}</h3>
+  <div *ngIf="currentRoute">
+    <h3>From {{currentRoute.StartDate | date}} to  {{currentRoute.ExpireDate | date}}</h3>
+  </div>
+  <h3>Status: <nz-badge nzStatus="success"></nz-badge>Available</h3>
+    <br />
+  </div>
+  <nz-table [nzLoading]="isLoading" #basicTable nzBordered [nzData]="dataSource">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Route</th>
+        <th>Request Date</th>
+        <th>Start Date</th>
+        <th>Expire Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ data.Name }}</td>
+        <td>{{ data.RequestDate | date}}</td>
+        <td>{{ data.StartDate | date }}</td>
+        <td>{{ data.ExpireDate | date}}</td>
+        <td>
+          <nz-badge *ngIf="data.Status === 'applied'" nzStatus="success"></nz-badge>
+          <nz-badge *ngIf="data.Status === 'pending'" nzStatus="processing"></nz-badge>
+          <nz-badge *ngIf="data.Status === 'rejected'" nzStatus="default"></nz-badge>
+          {{ data.Status }}
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  

@@ -17,7 +17,7 @@
       <td>{{ i + 1 }}</td>
       <td>{{ data.Name }}</td>
       <td>
-        <a (click)="Edit(data)">View Map</a>
+        <a (click)="viewMap(data)">View Map</a>
         <nz-divider nzType="vertical"></nz-divider>
         <a (click)="Edit(data)">Edit</a>
         <nz-divider nzType="vertical"></nz-divider>
@@ -40,14 +40,20 @@
   (nzOnCancel)="handleCancel()"
   (nzOnOk)="handleOk()"
 >
-<input required nz-input [(ngModel)]="title" placeholder="Locate name" />
-<br><br>
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-control nzHasFeedback [nzSpan]="24" nzErrorTip="Locate name is required">
+        <input [disabled]="isView" nz-input [(ngModel)]="title" name="title" placeholder="Locate name" required />
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+
   <div class="login-form" (ngSubmit)="submitForm()">
     <div
       class="map"
       leaflet
       (leafletMapReady)="onMapReady($event)"
-     
       (leafletDoubleClick)="onMapdoubleClick($event)"
       (leafletClick)="onMapClick($event)"
       [(leafletCenter)]="mapCenter"
@@ -67,6 +73,7 @@
       </button>
 
       <button
+        *ngIf="!isView"
         [nzLoading]="isLoading"
         nz-button
         class="login-form-button login-form-margin"

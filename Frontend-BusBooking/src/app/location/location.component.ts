@@ -29,8 +29,10 @@ export class LocationComponent implements OnInit, AfterContentInit {
   isLoading = true;
   isLoaded = false;
   title = '';
+  isView = false;
   Id;
   map;
+  latLng = [];
   mapCenter = latLng([21.091707504725257, 105.77749907970428]);
   streetMaps = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     detectRetina: true,
@@ -105,8 +107,8 @@ export class LocationComponent implements OnInit, AfterContentInit {
   dataSource = [];
   location: { latitude: number, longitude: number };
   constructor(public commonService: CommonService,
-    private locateSvc: LocationService,
-    private modal: NzModalService) {
+              private locateSvc: LocationService,
+              private modal: NzModalService) {
     commonService.routerTitle = [
       { title: 'Home', url: '' },
       { title: 'Locate Manager', url: '' },
@@ -136,14 +138,12 @@ export class LocationComponent implements OnInit, AfterContentInit {
   }
 
   Edit(data) {
+    this.isView = false;
     this.isVisible = true;
     this.title = data.Name;
     this.Id = data.Id;
     this.isLoaded = true;
-    console.log(data);
     const lat = data.Locate.split(',');
-    console.log(parseFloat(lat[0]));
-    console.log(parseFloat(lat[1]));
     setTimeout(() => {
       this.map.invalidateSize();
       setTimeout(() => {
@@ -158,20 +158,34 @@ export class LocationComponent implements OnInit, AfterContentInit {
   }
 
   addData() {
-
+    this.mapCenter = latLng([21.091707504725257, 105.77749907970428]);
     this.Id = null;
     this.isVisible = true;
     this.title = '';
     this.Id = undefined;
+    this.isView = false;
+    setTimeout(() => {
+      this.map.invalidateSize();
+      setTimeout(() => {
+        this.layers = [ ];
+      });
+    });
+  }
+  viewMap(data) {
+    this.isView = true;
+    this.isVisible = true;
+    const lat = data.Locate.split(',');
+    this.title = data.Name;
     setTimeout(() => {
       this.map.invalidateSize();
       setTimeout(() => {
         this.layers = [
 
+          marker([ parseFloat(lat[0]) , parseFloat(lat[1])])
         ];
-        this.mapCenter = latLng([21.091707504725257, 105.77749907970428]);
+        this.mapCenter = latLng([ parseFloat(lat[0]) , parseFloat(lat[1])]);
       });
-    });
+    }, 0);
   }
 
   handleOk(): void {
@@ -185,7 +199,13 @@ export class LocationComponent implements OnInit, AfterContentInit {
   }
 
   async submitForm() {
-
+    if (this.title && this.latLng.length > 0) {
+      const data = { Name: this.title, Locate: this.latLng.join(',')};
+      console.log(data);
+      await this.locateSvc.saveItem(data, this.Id);
+      this.isVisible = false;
+      this.loadData();
+    }
   }
 
   showDeleteConfirm(id): void {
@@ -227,9 +247,9 @@ export class LocationComponent implements OnInit, AfterContentInit {
   onMapClick(map: LeafletMouseEvent) {
     console.log(map);
     this.layers = [
-
-      marker([21.092628427797628, 105.7741141319275])
+      marker([map.latlng.lat, map.latlng.lng])
     ];
+    this.latLng = [map.latlng.lat, map.latlng.lng];
     this.mapCenter = map.latlng;
   }
 }

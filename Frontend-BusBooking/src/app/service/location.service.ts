@@ -13,7 +13,7 @@ export class LocationService {
   getByName(name): any {
     return this.http.get<any>(`${ApiUrl}/locate`, { params: { name } }).toPromise();
   }
-  saveItem(data, Id): any {
+  saveItem(data, Id?): any {
     if (Id) {
       return this.http
         .put<any>(`${ApiUrl}/locate/${Id}`, data)

@@ -1,11 +1,11 @@
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import en from '@angular/common/locales/en';
 import { registerLocaleData } from '@angular/common';
 import { HomeComponent } from './home/home.component';
@@ -19,7 +19,12 @@ import { BusRouteComponent } from './bus-route/bus-route.component';
 import { LocationComponent } from './location/location.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { SendRequestComponent } from './send-request/send-request.component';
-
+import localeVi from '@angular/common/locales/vi';
+import { RouteDetailComponent } from './bus-route/route-detail/route-detail.component';
+import { TokenInterceptorService } from './interceptor';
+import { MyrequestComponent } from './myrequest/myrequest.component';
+import { ClientPageComponent } from './client-page/client-page.component';
+import { RequestManagerComponent } from './request-manager/request-manager.component';
 
 registerLocaleData(en);
 @NgModule({
@@ -32,7 +37,11 @@ registerLocaleData(en);
     AuthenticationComponent,
     BusRouteComponent,
     LocationComponent,
-    SendRequestComponent
+    SendRequestComponent,
+    RouteDetailComponent,
+    MyrequestComponent,
+    ClientPageComponent,
+    RequestManagerComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +56,8 @@ registerLocaleData(en);
 
   ],
   providers: [
-    { provide: NZ_I18N, useValue: en_US }
+    { provide: NZ_I18N, useValue: en_US },
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })
