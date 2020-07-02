@@ -1,0 +1,2 @@
+export const ApiUrl = 'http://192.168.0.103:9000';
+export const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6NCwibmFtZSI6Ik5ndXnhu4VuIFRow6BuaCIsImlzTWFuYWdlciI6MH0sImlhdCI6MTU5MzU2MTc5NiwiZXhwIjoxNjAyMjAxNzk2fQ.SPvVPJ9cr15dOCktHqTjjouoqPDu6l_PCVkBdw27mhw';
