@@ -27,7 +27,7 @@
       <td>
         <a (click)="Edit(data)">Edit</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="showDeleteConfirm(data.Id)">Delete</a>
+        <a (click)="showDeleteConfirm(data.Id,data.IsEnable)">{{data.IsEnable == 0? 'Active' : 'Deactive'}}</a>
       </td>
     </tr>
   </tbody>

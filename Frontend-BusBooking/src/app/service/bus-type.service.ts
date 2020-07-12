@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiUrl } from 'src/Common';
+import { BaseService } from './common/base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BusTypeService {
+export class BusTypeService extends BaseService {
 
-  constructor(private http: HttpClient) {
-
+  constructor(public http: HttpClient) {
+    super(`bus-type`, http);
   }
   getAll() {
     return this.http.get<any>(`${ApiUrl}/bus-type`).toPromise();

@@ -22,30 +22,35 @@ let initAPIs = (app) => {
   router.post("/bus", BusController.store)
   router.put("/bus/:number", BusController.update)
   router.get("/bus/:number", BusController.getBusByNumber)
-  router.delete("/bus/:Id", BusController.delete)
+  router.delete("/bus/deactive/:id", BusController.delete)
+  router.delete("/bus/active/:id", BusController.undoDelete)
 
   router.get("/bus-type", BusTypeController.get)
   router.post("/bus-type", BusTypeController.store)
   router.put("/bus-type", BusTypeController.update)
-  router.delete("/bus-type", BusTypeController.delete)
+  router.delete("/bus-type/deactive/:id", BusTypeController.delete)
+  router.delete("/bus-type/active/:id", BusTypeController.undoDelete)
 
   //driver
   router.get("/driver", UserController.getDriver)
   router.post("/driver", UserController.storeDriver)
   router.put("/driver/:id", UserController.updateDriver)
-  router.delete("/driver/:id", UserController.delete)
+  router.delete("/driver/deactive/:id", UserController.delete)
+  router.delete("/driver/active/:id", UserController.undoDelete)
 
   //locate
   router.get("/locate", LocateController.get)
   router.put("/locate/:id", LocateController.update)
   router.post("/locate", LocateController.store)
-  router.delete("/locate/:id", LocateController.delete)
+  router.delete("/locate/deactive/:id", LocateController.delete)
+  router.delete("/locate/active/:id", LocateController.undoDelete)
   // end region
 
    //router
    router.get("/route", RouteController.get)
    router.get("/route/active", RouteController.getActive)
    router.get("/route/myroute", RouteController.getById)
+   router.get("/route/:id", RouteController.getRouteById)
    router.put("/route/:id", RouteController.update)
    router.post("/route", RouteController.store)
    router.delete("/route/deactive/:id", RouteController.delete)
@@ -65,6 +70,7 @@ let initAPIs = (app) => {
 
   //user
   router.get('/user', UserController.getUserById)
+  router.get('/history', UserController.getHistory)
 
   return app.use("/", router);
 }

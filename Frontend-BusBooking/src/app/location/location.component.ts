@@ -144,6 +144,7 @@ export class LocationComponent implements OnInit, AfterContentInit {
     this.Id = data.Id;
     this.isLoaded = true;
     const lat = data.Locate.split(',');
+    this.latLng = lat;
     setTimeout(() => {
       this.map.invalidateSize();
       setTimeout(() => {
@@ -199,6 +200,9 @@ export class LocationComponent implements OnInit, AfterContentInit {
   }
 
   async submitForm() {
+    console.log(this.title);
+    console.log(this.latLng);
+    
     if (this.title && this.latLng.length > 0) {
       const data = { Name: this.title, Locate: this.latLng.join(',')};
       console.log(data);
@@ -208,15 +212,15 @@ export class LocationComponent implements OnInit, AfterContentInit {
     }
   }
 
-  showDeleteConfirm(id): void {
+  showDeleteConfirm(id, status): void {
     this.modal.confirm({
-      nzTitle: 'Are you sure delete this type?',
+      nzTitle: `Are you sure ${status === 1 ? 'Deactive' : 'Active'} this type?`,
       nzContent: '<b style="color: red;"></b>',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzOnOk: async () => {
         this.isLoading = true;
-        await this.locateSvc.deleteItem(id);
+        await this.locateSvc.changeStatusItem(id, status === 1 ? 'deactive' : 'active');
         this.loadData();
       },
       nzCancelText: 'No',

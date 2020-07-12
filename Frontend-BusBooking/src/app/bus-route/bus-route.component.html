@@ -5,10 +5,10 @@
     <br />
   </div>
   <nz-table [nzLoading]="isLoading" #basicTable nzBordered [nzData]="dataDisplay">
-    <thead>
+    <thead (nzSortChange)="sort($event)" nzSingleSort>
       <tr>
         <th>STT</th>
-        <th nzCustomFilter>
+        <th  nzSortKey="Name" nzShowSort nzCustomFilter>
           Name
           <i
             nz-th-extra
@@ -23,35 +23,35 @@
             nzPlacement="bottomRight"
             [nzClickHide]="false"
             nzTableFilter
+           
         ></i>
         </th>
-        <th>Bus Number</th>
-        <th>Max seat</th>
+        <th nzShowSort nzSortKey="busNumber">Bus Number</th>
+   
         <th>Driver</th>
         <th>Start Locate</th>
         <th>End Locate</th>
         <th>Parking</th>
         <th>Parking Fee</th>
-        <th>Departure Time</th>
-        <th>Arrive Time</th>
+        <th>Time</th>
+        <!-- <th>Arrive Time</th> -->
         <th>Action</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let data of basicTable.data; index as i">
         <td>{{ i + 1 }}</td>
-        <td>{{ data.Name }}
+        <td >{{ data.Name }}
            
         </td>
         <td>{{ data.busNumber }}</td>
-        <td>{{ data.maxSeat }}</td>
+    
         <td>{{ data.driverName }} ({{data.driverAccount}})</td>
         <td>{{ data.FirstLocateName }}</td>
         <td>{{ data.EndLocateName }}</td>
         <td>{{ data.ParkingLot }}</td>
         <td>{{ data.ParkingFee | currency:"VND":true }}</td>
-        <td>{{ data.DepartureTime | date:'HH:mm' }}</td>
-        <td>{{ data.ArriveTime | date:'HH:mm' }}</td>
+        <td>{{ data.ArriveTime | date:'HH:mm' }} to {{ data.DepartureTime | date:'HH:mm' }}</td>
 
         <td>
           <a (click)="Edit(data)">Edit</a>

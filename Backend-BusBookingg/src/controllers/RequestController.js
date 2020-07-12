@@ -66,6 +66,14 @@ module.exports = {
       req.headers.authtoken,
       refreshTokenSecret
     );
+    if(!decoded){
+      res.status(401).send("You need to authen");
+      return;
+    }
+    const user = await getUser(decoded.data._id)
+    data.modifiedBy = user.Id
+    data.modifiedOn = (new Date()).toISOString();
+
     data.RequesterId = decoded.data._id
     data.RequestDate = (new Date()).toISOString();
     let sql = `INSERT INTO ${table} SET ?`;
@@ -76,7 +84,24 @@ module.exports = {
   },
 
   accept: async (req, res) => {
-    let sql = `UPDATE ${table} SET Status = 'applied' WHERE Id = ?`;
+    let sql = `UPDATE ${table} SET ? WHERE Id = ?`; //test
+    let data = { Status: `applied`}
+    const decoded = await jwtHelper.verifyToken(
+      req.headers.authtoken,
+      refreshTokenSecret
+    );
+    if(!decoded){
+      res.status(401).send("You need to authen");
+      return;
+    }
+    const user = await getUser(decoded.data._id)
+    if(user.isManager != 1) {
+      res.status(401).send("You dont have permission");
+      return;
+    }
+    data.modifiedBy = user.Id
+    data.modifiedOn = (new Date()).toISOString();
+
     const currentRequest = await getRequestById(req.params.id);
     if(!currentRequest) {
       throw err;
@@ -89,12 +114,15 @@ module.exports = {
       res.status(400).send("This route is full of people, max is "+ maxSeat.SeatNumber);
       return;
     }
-    db.query(sql, [req.params.id], (err, response) => {
+    db.query(sql, [data ,req.params.id], (err, response) => {
       if (err) throw err;
     });
+
+    
     let sql2 = `UPDATE user SET RouteResgisterId = ? WHERE Id = ?`;
     db.query(sql2, [maxSeat.Id,currentRequest.RequesterId], (err, response) => {
       if (err) throw err;
+      storeHistory({ BusRouteId: maxSeat.Id, UserId: currentRequest.RequesterId, modifiedBy: data.modifiedBy, modifiedOn: data.modifiedOn})
       res.json({ message: "Ok" });
     });
   },
@@ -159,3 +187,11 @@ const getRequestById = async (Id) => new Promise((resolve, reject) => {
     resolve(response[0])
   });
 })
+
+
+const storeHistory = async (data) => {
+  let sql = `INSERT INTO user_register_history SET ?`;
+  db.query(sql, [data], (err, response) => {
+    if (err) throw err;
+  });
+}

@@ -49,4 +49,8 @@ export class BusRouteService {
     return this.http.get<any>(`${ApiUrl}/request`).toPromise();
   }
 
+  getHistory() {
+    return this.http.get<any>(`${ApiUrl}/history`).toPromise();
+  }
+
 }

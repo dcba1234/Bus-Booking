@@ -1,3 +1,4 @@
+import { BaseService } from './common/base.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiUrl } from 'src/Common';
@@ -5,8 +6,10 @@ import { ApiUrl } from 'src/Common';
 @Injectable({
   providedIn: 'root'
 })
-export class LocationService {
-  constructor(private http: HttpClient) { }
+export class LocationService extends BaseService {
+  constructor(public http: HttpClient) {
+    super('locate', http);
+  }
   getAll(): any {
     return this.http.get<any>(`${ApiUrl}/locate`).toPromise();
   }

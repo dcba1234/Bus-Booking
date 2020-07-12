@@ -39,9 +39,8 @@ export class RouteDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.activeRoute.params.subscribe(async (param) => {
-     
-      this.busData = await this.busSvc.getAll();
-      this.locateData = await this.locateSvc.getAll();
+      this.busData = (await this.busSvc.getAll()).filter((item) => item.IsEnable !== 0);
+      this.locateData = (await this.locateSvc.getAll()).filter((item) => item.IsEnable !== 0);
       if (param.id !== 'create') {
         this.currentData = await this.busRouteSvc.getById(param.id);
         this.commonService.title = 'Route Manager';

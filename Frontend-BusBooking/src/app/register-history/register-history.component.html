@@ -1,0 +1,25 @@
+<div class="type_action">
+
+    <br />
+  </div>
+  <nz-table [nzLoading]="isLoading" #basicTable nzBordered [nzData]="dataSource">
+    <thead >
+      <tr>
+        <th>STT</th>
+        <th  nzSortKey="Name" nzShowSort nzCustomFilter>
+          User Name
+        </th>
+        <th>Route Name</th>
+        <th>ModifiedOn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data; index as i">
+        <td>{{ i + 1 }}</td>
+        <td >{{ data.userName }}        
+        </td>
+        <td>{{ data.routeName }}</td>
+        <td>{{ data.ModifiedOn | date:'HH:mm' }}</td>
+      </tr>
+    </tbody>
+  </nz-table>

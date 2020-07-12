@@ -25,6 +25,7 @@ import { TokenInterceptorService } from './interceptor';
 import { MyrequestComponent } from './myrequest/myrequest.component';
 import { ClientPageComponent } from './client-page/client-page.component';
 import { RequestManagerComponent } from './request-manager/request-manager.component';
+import { RegisterHistoryComponent } from './register-history/register-history.component';
 
 registerLocaleData(en);
 @NgModule({
@@ -41,7 +42,8 @@ registerLocaleData(en);
     RouteDetailComponent,
     MyrequestComponent,
     ClientPageComponent,
-    RequestManagerComponent
+    RequestManagerComponent,
+    RegisterHistoryComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { BusService } from './../service/bus.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -46,9 +47,8 @@ export class BusComponentComponent implements OnInit {
 
   async loadData() {
     const data = await this.busSvc.getAll();
-    this.types = await this.busTypeSvc.getAll();
-    this.drivers = await this.driverSvc.getAll();
-    console.log(data);
+    this.types = (await this.busTypeSvc.getAll()).filter((item) => item.IsEnable !== 0);
+    this.drivers = (await this.driverSvc.getAll()).filter((item) => item.IsEnable !== 0);
     this.dataSource = data;
   }
 
@@ -97,19 +97,19 @@ export class BusComponentComponent implements OnInit {
     }
   }
 
-  showDeleteConfirm(id): void {
+  showDeleteConfirm(id, status): void {
     this.modal.confirm({
-      nzTitle: 'Are you sure delete this type?',
+      nzTitle: `Are you sure ${status === 1 ? 'Deactive' : 'Active'} this type?`,
       nzContent: '<b style="color: red;"></b>',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzOnOk: async () => {
         this.isLoading = true;
-        await this.busSvc.deleteItem(id);
+        await this.busSvc.changeStatusItem(id, status === 1 ? 'deactive' : 'active');
         this.loadData();
       },
       nzCancelText: 'No',
-      nzOnCancel: () => console.log('Cancel')
+      nzOnCancel: () => { },
     });
   }
 }

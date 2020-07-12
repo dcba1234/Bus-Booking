@@ -93,15 +93,15 @@ export class DriverComponent implements OnInit {
     }
   }
 
-  showDeleteConfirm(id): void {
+  showDeleteConfirm(id, status): void {
     this.modal.confirm({
-      nzTitle: 'Are you sure delete this type?',
+      nzTitle: `Are you sure ${status === 1 ? 'Deactive' : 'Active'} this type?`,
       nzContent: '<b style="color: red;"></b>',
       nzOkText: 'Yes',
       nzOkType: 'danger',
       nzOnOk: async () => {
         this.isLoading = true;
-        await this.driverSvc.deleteItem(id);
+        await this.driverSvc.changeStatusItem(id, status === 1 ? 'deactive' : 'active');
         this.loadData();
       },
       nzCancelText: 'No',

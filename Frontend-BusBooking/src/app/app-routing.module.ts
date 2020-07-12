@@ -1,3 +1,4 @@
+import { RegisterHistoryComponent } from './register-history/register-history.component';
 import { PermissionGuard } from './permission.guard';
 import { RequestManagerComponent } from './request-manager/request-manager.component';
 import { ClientPageComponent } from './client-page/client-page.component';
@@ -30,6 +31,7 @@ const routes: Routes = [
           { path: 'route/:id', component: RouteDetailComponent },
           { path: 'route/create', component: RouteDetailComponent },
           { path: 'home', component: RequestManagerComponent },
+          { path: 'register-history', component: RegisterHistoryComponent },
         ]
       },
     ]

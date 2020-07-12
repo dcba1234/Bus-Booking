@@ -8,16 +8,16 @@ const table = "bus_route";
 const refreshTokenSecret =
   process.env.REFRESH_TOKEN_SECRET || "access-token-secret-tienthanh";
 const getAll =
-  `SELECT bus_route.Id, bus_route.Name, BusId,bus.Number as 'busNumber',bus_type.SeatNumber as 'maxSeat', bus_type.Name as 'busType',user.Account as 'driverAccount', 
-  user.Name as 'driverName' ,FirstLocateId,IsEnable ,L1.Name as FirstLocateName,L1.Locate as FirstLocate,L2.Name as EndLocateName, EndLocateId, 
-  ParkingFee, ParkingLot, DepartureTime, ArriveTime, IsShuffer, IsEnable, SeatCount FROM (bus_route,bus,bus_type,user)
+  `SELECT bus_route.Id, bus_route.IsEnable,bus_route.Name, BusId,bus.Number as 'busNumber',bus_type.SeatNumber as 'maxSeat', bus_type.Name as 'busType',user.Account as 'driverAccount', 
+  user.Name as 'driverName' ,FirstLocateId ,L1.Name as FirstLocateName,L1.Locate as FirstLocate,L2.Name as EndLocateName, EndLocateId, 
+  ParkingFee, ParkingLot, DepartureTime, ArriveTime, IsShuffer, SeatCount FROM (bus_route,bus,bus_type,user)
   INNER JOIN bus_locate L1 ON bus_route.FirstLocateId = L1.Id 
    INNER JOIN bus_locate L2 ON bus_route.EndLocateId = L2.Id 
  WHERE bus_route.BusId = bus.Id and bus.TypeId = bus_type.Id and bus.DriverId = user.Id`;
 
  const getByRouteId = `SELECT bus_route.Id, bus_route.Name, BusId,bus.Number as 'busNumber',bus_type.SeatNumber as 'maxSeat', bus_type.Name as 'busType',user.Account as 'driverAccount', 
-          user.Name as 'driverName' ,FirstLocateId,IsEnable ,L1.Name as FirstLocateName,L1.Locate as FirstLocate,L2.Name as EndLocateName, EndLocateId, 
-          ParkingFee, ParkingLot, DepartureTime, ArriveTime, IsShuffer, IsEnable, SeatCount FROM (bus_route,bus,bus_type,user)
+          user.Name as 'driverName' ,FirstLocateId,bus_route.IsEnable ,L1.Name as FirstLocateName,L1.Locate as FirstLocate,L2.Name as EndLocateName, EndLocateId, 
+          ParkingFee, ParkingLot, DepartureTime, ArriveTime, IsShuffer, SeatCount FROM (bus_route,bus,bus_type,user)
           INNER JOIN bus_locate L1 ON bus_route.FirstLocateId = L1.Id 
             INNER JOIN bus_locate L2 ON bus_route.EndLocateId = L2.Id 
           WHERE bus_route.BusId = bus.Id and bus.TypeId = bus_type.Id and bus.DriverId = user.Id and bus_route.Id = ?`;
@@ -33,7 +33,7 @@ module.exports = {
     });
   },
   getActive: (req, res) => {
-    let sql = getAll + ' and bus_route.isEnable = 1';
+    let sql = getAll + ' and bus_route.IsEnable = 1';
     if (req.query.name) {
       sql = getAll;
     }
@@ -74,10 +74,46 @@ module.exports = {
       });
     } else res.json("không có dữ liệu");
   },
+  getRouteById: async (req, res) => {
+    if(!req.headers.authtoken){
+      res.status(401).send("You need to authen");
+      return;
+    } 
+    const decoded = await jwtHelper.verifyToken(
+      req.headers.authtoken,
+      refreshTokenSecret
+    );
+    if(!decoded){
+      res.status(401).send("You need to authen");
+    }
+  
+      let sql = getByRouteId;
+      db.query(sql, [req.params.id], (err, response) => {
+        if (err) throw err;
+        res.json(response[0]);
+      });
+    
+  },
   update: async (req, res) => {
     let data = req.body;
     let Id = req.params.id;
+    const decoded = await jwtHelper.verifyToken(
+      req.headers.authtoken,
+      refreshTokenSecret
+    );
+    if(!decoded){
+      res.status(401).send("You need to authen");
+      return;
+    }
+    const user = await getUser(decoded.data._id)
+    if(user.isManager != 1) {
+      res.status(401).send("You dont have permission");
+      return;
+    }
+    data.modifiedBy = user.Id
+    data.modifiedOn = (new Date()).toISOString();
     let sql = `UPDATE ${table} SET ? WHERE Id = ?`;
+    storeHistory({...data, ItemId: Id},'update')
     db.query(sql, [data, Id], (err, response) => {
       if (err) throw err;
       res.json({ message: "Cập nhật thành công !" });
@@ -85,6 +121,22 @@ module.exports = {
   },
   store: async (req, res) => {
     let data = req.body;
+    const decoded = await jwtHelper.verifyToken(
+      req.headers.authtoken,
+      refreshTokenSecret
+    );
+    if(!decoded){
+      res.status(401).send("You need to authen");
+      return;
+    }
+    const user = await getUser(decoded.data._id)
+    if(user.isManager != 1) {
+      res.status(401).send("You dont have permission");
+      return;
+    }
+    data.modifiedBy = user.Id
+    data.modifiedOn = (new Date()).toISOString();
+    storeHistory({...data, ItemId: 0},'create')
     let sql = `INSERT INTO ${table} SET ?`;
     db.query(sql, [data], (err, response) => {
       if (err) throw err;
@@ -116,3 +168,12 @@ const getUser = async (Id) => new Promise((resolve, reject) => {
     resolve(response[0])
   });
 })
+
+
+const storeHistory = async (data, action) => {
+  let sql = `INSERT INTO ${table}_history SET ?`;
+  data.action = action;
+  db.query(sql, [data], (err, response) => {
+    if (err) throw err;
+  });
+}

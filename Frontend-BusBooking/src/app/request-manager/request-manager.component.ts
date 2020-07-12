@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { BusRouteService } from '../service/bus-route.service';
 import { CommonService } from '../service/common/common.service';
@@ -11,7 +12,16 @@ import { NzModalService } from 'ng-zorro-antd';
 export class RequestManagerComponent implements OnInit {
   isLoading = true;
   dataSource = [];
-  constructor(private routeSvc: BusRouteService, public commonService: CommonService, private modal: NzModalService) {
+  displayData = [];
+  selectedValue = 'all';
+  isAllDisplayDataChecked = false;
+  isIndeterminate = false;
+  numberOfChecked = [];
+  mapOfCheckedId: { [key: string]: boolean } = {};
+  constructor(private routeSvc: BusRouteService,
+              public commonService: CommonService,
+              private modal: NzModalService,
+              private router: Router) {
     commonService.routerTitle = [
       { title: 'Home', url: '' },
       { title: 'Request', url: '' },
@@ -25,6 +35,7 @@ export class RequestManagerComponent implements OnInit {
   async onLoad() {
     this.isLoading = true;
     this.dataSource = await this.routeSvc.getRequest();
+    this.displayData = [...this.dataSource];
     this.isLoading = false;
   }
   apply(data) {
@@ -32,6 +43,15 @@ export class RequestManagerComponent implements OnInit {
   }
   reject(data) {
     this.showConfirm(false, data);
+  }
+
+  refreshStatus() {
+    this.numberOfChecked = this.displayData.filter(item => this.mapOfCheckedId[item.Id]);
+  }
+
+  checkAll(value: boolean): void {
+    this.displayData.filter(item => item.Status === 'pending').forEach(item => (this.mapOfCheckedId[item.Id] = value));
+    this.refreshStatus();
   }
 
   showConfirm(apply: boolean, data): void {
@@ -51,6 +71,20 @@ export class RequestManagerComponent implements OnInit {
         this.onLoad();
       }
     });
+  }
+
+  statusChange(event) {
+    console.log(event);
+    if (event === 'all') {
+      this.displayData = [...this.dataSource];
+      return;
+    }
+    this.displayData = this.dataSource.filter((item) => item.Status === event);
+  }
+
+  routeView(id) {
+    console.log(id);
+    this.router.navigateByUrl(`/admin/route/${id}`);
   }
 
   showAlert(): void {

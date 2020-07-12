@@ -1,10 +1,25 @@
 <div class="type_action">
-
+  <div style="display: flex;"> 
+    <h3 style="margin-right: 10px;">Status  </h3>
+    <nz-select (ngModelChange)="statusChange($event)" style="width: 200px;" [(ngModel)]="selectedValue" nzAllowClear nzPlaceHolder="Choose">
+      <nz-option nzValue="all" nzLabel="all"></nz-option>
+      <nz-option nzValue="pending" nzLabel="pending"></nz-option>
+      <nz-option nzValue="applied" nzLabel="applied"></nz-option>
+      <nz-option nzValue="rejected" nzLabel="rejected"></nz-option>
+    </nz-select>
+  </div>
+ 
     <br />
   </div>
-  <nz-table [nzLoading]="isLoading" #basicTable nzBordered [nzData]="dataSource">
+  <button [disabled] ="numberOfChecked.length === 0" nz-button style="margin-bottom: 10px;" nzType="default">Apply All</button>
+  <nz-table #rowSelectionTable [nzLoading]="isLoading" #basicTable nzBordered [nzData]="displayData">
     <thead>
       <tr>
+        <th 
+        nzShowCheckbox
+        [(nzChecked)]="isAllDisplayDataChecked"
+        [nzIndeterminate]="isIndeterminate"
+        (nzCheckedChange)="checkAll($event)"></th>
         <th>STT</th>
         <th>Route</th>
         <th>Requester</th>
@@ -17,8 +32,14 @@
     </thead>
     <tbody>
       <tr *ngFor="let data of basicTable.data; index as i">
+        <td
+            nzShowCheckbox
+            [(nzChecked)]="mapOfCheckedId[data.Id]"
+            [nzDisabled]="data.Status != 'pending'"
+            (nzCheckedChange)="refreshStatus()"
+          ></td>
         <td>{{ i + 1 }}</td>
-        <td>{{ data.Name }}</td>
+        <td><a (click)="routeView(data.routeId)">{{ data.Name }}</a></td>
         <td>{{data.Account}} - {{ data.requesterName }}</td>
         <td>{{ data.RequestDate | date}}</td>
         <td>{{ data.StartDate | date }}</td>

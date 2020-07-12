@@ -1,3 +1,4 @@
+// tslint:disable:no-non-null-assertion
 import { Router } from '@angular/router';
 import { BusRouteService } from './../service/bus-route.service';
 import { Component, OnInit } from '@angular/core';
@@ -19,6 +20,8 @@ export class BusRouteComponent implements OnInit {
   Id;
   dataSource = [];
   dataDisplay = [];
+  sortName: string | null = null;
+  sortValue: string | null = null;
   rfDriver: FormGroup;
   constructor(
     public commonService: CommonService,
@@ -50,6 +53,13 @@ export class BusRouteComponent implements OnInit {
     this.dataSource = data;
     this.dataDisplay = [...data];
     this.isLoading = false;
+  }
+
+  sort(sort: { key: string; value: string }): void {
+    console.log(sort);
+    this.sortName = sort.key;
+    this.sortValue = sort.value;
+    this.searchName();
   }
 
   Edit(data) {
@@ -97,6 +107,19 @@ export class BusRouteComponent implements OnInit {
 
   searchName() {
     console.log(this.dataSource);
+
+    if (this.sortName && this.sortValue) {
+      this.dataDisplay = this.dataSource.sort((a, b) =>
+        this.sortValue === 'ascend'
+          ? a[this.sortName!] > b[this.sortName!]
+            ? 1
+            : -1
+          : b[this.sortName!] > a[this.sortName!]
+          ? 1
+          : -1
+      );
+    }
+
     if (!this.searchValue.trim()) {
       this.dataDisplay = [...this.dataSource];
       return;

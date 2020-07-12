@@ -1,3 +1,4 @@
+import { BaseService } from './common/base.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiUrl } from 'src/Common';
@@ -5,8 +6,10 @@ import { ApiUrl } from 'src/Common';
 @Injectable({
   providedIn: 'root',
 })
-export class DriverService {
-  constructor(private http: HttpClient) {}
+export class DriverService extends BaseService {
+  constructor(public http: HttpClient) {
+    super('driver', http);
+  }
   getAll(): any {
     return this.http.get<any>(`${ApiUrl}/driver`).toPromise();
   }
