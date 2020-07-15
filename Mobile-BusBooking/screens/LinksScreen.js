@@ -54,6 +54,13 @@ export default class LinksScreen extends React.Component {
     Linking.openURL(url); 
   }
 
+  viewDetai = () => {
+    this.props.navigation.navigate("Details", {
+      Id: 1,
+      Route: this.state.data
+    });
+  }
+
   render() {
     const data = this.state.data;
     return (
@@ -81,6 +88,7 @@ export default class LinksScreen extends React.Component {
             Route Title
           </Text>
           <Text style={{ fontSize: 18 }}>{data.Name}</Text>
+          <Text onPress={(e) => this.viewDetai()} style={{ fontSize: 18 , color:'#1890ff'}}>View Detail &gt;&gt;</Text>
         </View>
         <View
           style={{
@@ -174,7 +182,6 @@ export default class LinksScreen extends React.Component {
           </Text>
           <Text style={{ fontSize: 18 }}>{data.driverName}</Text>
         </View>
-        <Button onPress={() => this.viewMap()} type="primary">Map View</Button>
 
       </ScrollView>
     );

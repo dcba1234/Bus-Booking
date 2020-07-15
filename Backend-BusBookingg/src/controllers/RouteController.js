@@ -16,21 +16,25 @@ const getAll =
  WHERE bus_route.BusId = bus.Id and bus.TypeId = bus_type.Id and bus.DriverId = user.Id`;
 
  const getByRouteId = `SELECT bus_route.Id, bus_route.Name, BusId,bus.Number as 'busNumber',bus_type.SeatNumber as 'maxSeat', bus_type.Name as 'busType',user.Account as 'driverAccount', 
-          user.Name as 'driverName' ,FirstLocateId,bus_route.IsEnable ,L1.Name as FirstLocateName,L1.Locate as FirstLocate,L2.Name as EndLocateName, EndLocateId, 
+          user.Name as 'driverName' ,FirstLocateId,bus_route.IsEnable ,L1.Name as FirstLocateName,L1.Locate as FirstLocate,L2.Name as EndLocateName, EndLocateId, L2.Locate as EndLocate,
           ParkingFee, ParkingLot, DepartureTime, ArriveTime, IsShuffer, SeatCount FROM (bus_route,bus,bus_type,user)
           INNER JOIN bus_locate L1 ON bus_route.FirstLocateId = L1.Id 
             INNER JOIN bus_locate L2 ON bus_route.EndLocateId = L2.Id 
           WHERE bus_route.BusId = bus.Id and bus.TypeId = bus_type.Id and bus.DriverId = user.Id and bus_route.Id = ?`;
 module.exports = {
-  get: (req, res) => {
+  get: async (req, res) => {
     let sql = getAll;
     if (req.query.name) {
       sql = getAll;
     }
-    db.query(sql, [req.query.name], (err, response) => {
+    db.query(sql, [req.query.name], async (err, response) => {
       if (err) throw err;
+      await Promise.all(response.map( async (element) => {
+        element.locates = await getLocates(element.Id)
+      
+      }));
       res.json(response);
-    });
+    })
   },
   getActive: (req, res) => {
     let sql = getAll + ' and bus_route.IsEnable = 1';
@@ -52,7 +56,8 @@ module.exports = {
       });
     } else res.json("không có dữ liệu");
   },
-  getById: async (req, res) => {
+  getMyRoute: async (req, res) => {
+    console.log("my royte");
     if(!req.headers.authtoken){
       res.status(401).send("You need to authen");
       return;
@@ -68,8 +73,9 @@ module.exports = {
 
     if (user) {
       let sql = getByRouteId;
-      db.query(sql, [user.RouteResgisterId], (err, response) => {
+      db.query(sql, [user.RouteResgisterId],async (err, response) => {
         if (err) throw err;
+        response[0].locates = await getLocates(user.RouteResgisterId)
         res.json(response[0]);
       });
     } else res.json("không có dữ liệu");
@@ -135,6 +141,7 @@ module.exports = {
       return;
     }
     data.modifiedBy = user.Id
+    data.Id = undefined;
     data.modifiedOn = (new Date()).toISOString();
     storeHistory({...data, ItemId: 0},'create')
     let sql = `INSERT INTO ${table} SET ?`;
@@ -172,8 +179,19 @@ const getUser = async (Id) => new Promise((resolve, reject) => {
 
 const storeHistory = async (data, action) => {
   let sql = `INSERT INTO ${table}_history SET ?`;
+  data.Id = undefined;
   data.action = action;
   db.query(sql, [data], (err, response) => {
     if (err) throw err;
   });
 }
+
+const getLocates = async (routeId) => new Promise((resolve, reject) => {
+  let sql = `SELECT route_locate.Id, route_locate.locateId,route_locate.ArriveTime, route_locate.modifiedOn, bus_locate.Name as 'Name',bus_locate.Locate,route_locate.modifiedBy, 
+            route_locate.routeId FROM route_locate, bus_locate WHERE bus_locate.Id = route_locate.locateId and route_locate.routeId = ?`;
+   db.query(sql, [routeId], (err, response) => {
+    if (err) throw err;
+    resolve(response || [])
+  });
+
+})

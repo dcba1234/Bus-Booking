@@ -51,7 +51,7 @@
         <td>{{ data.EndLocateName }}</td>
         <td>{{ data.ParkingLot }}</td>
         <td>{{ data.ParkingFee | currency:"VND":true }}</td>
-        <td>{{ data.ArriveTime | date:'HH:mm' }} to {{ data.DepartureTime | date:'HH:mm' }}</td>
+        <td>{{ data.DepartureTime | date:'HH:mm' }} to {{ data.ArriveTime | date:'HH:mm' }}</td>
 
         <td>
           <a (click)="Edit(data)">Edit</a>

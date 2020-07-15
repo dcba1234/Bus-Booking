@@ -49,7 +49,7 @@ let initAPIs = (app) => {
    //router
    router.get("/route", RouteController.get)
    router.get("/route/active", RouteController.getActive)
-   router.get("/route/myroute", RouteController.getById)
+   router.get("/route/myroute", RouteController.getMyRoute)
    router.get("/route/:id", RouteController.getRouteById)
    router.put("/route/:id", RouteController.update)
    router.post("/route", RouteController.store)

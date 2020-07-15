@@ -6,8 +6,10 @@ import TabBarIcon from '../components/TabBarIcon';
 import {HomeScreen} from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import LoginScreen from '../screens/LoginScreen';
 import NovelDetail from '../screens/NovelDetail'
 import ChapDetail from '../screens/ChapDetail'
+import {MyRequestScreen} from '../screens/MyRequestScreen'
 import * as Font from "expo-font";
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -32,7 +34,7 @@ export const HomeStack = createStackNavigator(
 
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Trang chủ',
+  tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     // <TabBarIcon
     //   focused={focused}
@@ -50,13 +52,14 @@ HomeStack.path = '';
 
 const LinksStack = createStackNavigator(
   {
+    myrequest: MyRequestScreen,
     Links: LinksScreen,
   },
   config
 );
 
 LinksStack.navigationOptions = {
-  tabBarLabel: 'My Route',
+  tabBarLabel: 'My Request',
   tabBarIcon: ({ focused }) => {
     return(
     //#ccc #2f95dc<Icon type="" />
@@ -70,12 +73,13 @@ LinksStack.path = '';
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
+    Login: LoginScreen
   },
   config
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Thông tin',
+  tabBarLabel: 'Setting',
   tabBarIcon: ({ focused }) => (
     <Icon name="info-circle" size="md" color={focused? '#2f95dc' : '#ccc'} />
   ),
@@ -91,5 +95,26 @@ const tabNavigator = createBottomTabNavigator({
 });
 
 tabNavigator.path = '';
+
+SettingsStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible;
+  if (navigation.state.routes.length > 1) {
+    navigation.state.routes.map(route => {
+      if (route.routeName === "Login") {
+        tabBarVisible = false;
+      } else {
+        tabBarVisible = true;
+      }
+    });
+  }
+
+  return {
+    tabBarVisible,
+    tabBarLabel:'Logout',
+    tabBarIcon: ({ focused }) => (
+      <Icon name="info-circle" size="md" color={focused? '#2f95dc' : '#ccc'} />
+    ),
+  };
+};
 
 export default tabNavigator;

@@ -27,7 +27,7 @@ import { BusService } from "./Service/BusService.js";
 
 const lodash = require("lodash");
 
-export class HomeScreen extends React.Component {
+export class MyRequestScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,7 +47,8 @@ export class HomeScreen extends React.Component {
       this.props.navigation.navigate("Login")
       return;
     }
-    let listRoute = await BusService.getAllBusRoute();;
+    let listRoute = await BusService.getMyRequest();
+    console.log(listRoute);
     this.setState({ isReady: true, listRoute });
   }
 
@@ -63,10 +64,7 @@ export class HomeScreen extends React.Component {
   };
 
   onRouteClick = (item,index) => {
-    this.props.navigation.navigate("Details", {
-      Id: item.Id,
-      Route: item
-    });
+   
     
   }
 
@@ -95,10 +93,15 @@ export class HomeScreen extends React.Component {
             />
           }
         >
-          
+         
           <View style={{ height: 40, width: "100%", flexDirection: "row" }}>
-            <Icon name="car" size="lg" color="#1890ff" />
-            <Text style={{ fontSize: 21, color: "#1890ff" }}> Bus information</Text>
+            <Icon name="file-done" size="lg" color="#1890ff" />
+            <Text style={{ fontSize: 21, color: "#1890ff" }}> My Request</Text>
+          </View>
+          <View>
+            <Button onPress={() => {
+              this.props.navigation.navigate("Links")
+            }} type="primary">My route</Button>
           </View>
           <View style={{ height: 60, width: "100%", flexDirection: "column" }}>
              <SearchBar defaultValue="" placeholder="Search by locate or name" value={this.state.value} cancelText="cancel" onChange={this.onChange}/>
@@ -108,7 +111,7 @@ export class HomeScreen extends React.Component {
           </Badge> */}
           <View style={{width:'100%',borderBottomWidth:1,borderBottomColor:'#ccc', flexDirection:'row'}}>
             <Text style={{ fontSize: 16,color: "#000",width:'15%' }}> No</Text>
-            <Text style={{ fontSize: 16, color: "#000",width:'55%'  }}> Description</Text>
+            <Text style={{ fontSize: 16, color: "#000",width:'55%'  }}> Status</Text>
             <Text style={{ fontSize: 16, color: "#000",width:'30%' }}> Time</Text>
           </View>
           <ScrollView 
@@ -119,7 +122,7 @@ export class HomeScreen extends React.Component {
              <TouchableOpacity key={index} onPress={() => this.onRouteClick(item,index)}>
                <View key={index} style={{width:'100%', borderBottomWidth:1,paddingBottom:15,paddingTop:15,borderBottomColor:'#ccc',flexDirection:'row'}}>
                   <View style={{ fontSize: 16, color: "#000",width:'15%', textAlign:'left' }}><Text style={{textAlign: 'left'}}>{item.Name}</Text></View>
-                  <View style={{ fontSize: 16, color: "#000",width:'53%',marginLeft:'2%', textAlign:'left' }}><Text style={{textAlign: 'left'}}>{item.FirstLocateName}</Text></View>
+                  <View style={{ fontSize: 16, color: "#000",width:'53%',marginLeft:'2%', textAlign:'left' }}><Text style={{textAlign: 'left'}}>{item.Status}</Text></View>
                   <View style={{ fontSize: 16, color: "#000",width:'30%', textAlign:'left' }}><Text style={{textAlign: 'left'}}>
                     {`${moment(item.DepartureTime).format('HH:mm')} - ${moment(item.ArriveTime).format('HH:mm')}`}
                     </Text></View>
@@ -189,10 +192,6 @@ export class HomeScreen extends React.Component {
   }
 }
 
-HomeScreen.navigationOptions = {
+MyRequestScreen.navigationOptions = {
   header: null
 };
-
-export const RootStack = createStackNavigator({
-  Home: HomeScreen
-});
