@@ -18,7 +18,6 @@ module.exports = {
     }
     db.query(sql, (err, response) => {
       if (err) throw err;
-      console.log(response)
       res.json(response);
     });
   },

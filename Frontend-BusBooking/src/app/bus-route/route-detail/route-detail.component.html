@@ -63,13 +63,49 @@
             </nz-form-control>
           </nz-form-item>
     </div>
-    
+    <div nz-row formArrayName="locates" *ngFor="let control of locates.controls; let i = index" [nzGutter]="12">
+      <nz-form-item nz-col [nzSpan]="12">
+        <nz-form-label [nzSm]="6" [nzXs]="24" *ngIf="i == 0" [nzFor]="i"
+          >Routes
+        </nz-form-label>
+        <nz-form-control
+          [nzSm]="16" [nzXs]="24"
+          [nzOffset]="i == 0 ? 0 : 6"
+          nzErrorTip="Please input passenger's name or delete this field."
+          [formGroupName]="i"
+      
+        
+        >
+        <div style="display: flex; width: 100%;">
+          <nz-select style="" formControlName="locateId">
+            <nz-option *ngFor="let item of locateData" [nzLabel]="item.Name" [nzValue]="item.Id"></nz-option>
+          </nz-select>
+          <nz-time-picker style="margin-left: 5px; min-width: 110px;" nzFormat="HH:mm" formControlName="ArriveTime"></nz-time-picker>
+          <i style="display: flex; margin-left: 5px; align-items: center;" nz-icon nzType="minus-circle-o" class="dynamic-delete-button" (click)="removeField(i)"></i>
+        </div>
+     
+         
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-row [nzGutter]="12">
+      <nz-form-item class="register-area">
+          <nz-form-control [nzSpan]="24" [nzOffset]="3">
+            <button nz-button nzType="dashed" class="add-button" type="button" (click)="addField($event)">
+              <i nz-icon nzType="plus"></i>
+              Add route
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- <nz-form-item>{{this.rform.value | json}}</nz-form-item> -->
+   </div>  
   
     
     <div nz-row [nzGutter]="12">
         <nz-form-item class="register-area">
             <nz-form-control [nzSpan]="24" [nzOffset]="3">
-              <button [nzLoading]="isLoading" nz-button nzType="primary">Save</button>
+              <button [nzLoading]="false" nz-button nzType="primary">Save</button>
             </nz-form-control>
           </nz-form-item>
      </div>  

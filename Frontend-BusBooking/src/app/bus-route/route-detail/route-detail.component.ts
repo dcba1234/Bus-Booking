@@ -1,6 +1,7 @@
+import { filter } from 'rxjs/operators';
 import { LocationService } from './../../service/location.service';
 import { BusService } from './../../service/bus.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { BusRouteService } from './../../service/bus-route.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -33,7 +34,8 @@ export class RouteDetailComponent implements OnInit {
       ParkingFee: [0, [Validators.required]],
       ParkingLot: ['', [Validators.required]],
       DepartureTime: [new Date(), [Validators.required]],
-      ArriveTime: [new Date(), [Validators.required]]
+      ArriveTime: [new Date(), [Validators.required]],
+      locates: this.fb.array([])
     });
   }
 
@@ -51,6 +53,10 @@ export class RouteDetailComponent implements OnInit {
         ];
         this.currentData.DepartureTime = new Date(this.currentData.DepartureTime);
         this.currentData.ArriveTime = new Date(this.currentData.ArriveTime);
+        this.currentData.locates.forEach(element => {
+          this.addFieldValue(element);
+        });
+        delete this.currentData.locates;
         this.rform.patchValue(this.currentData);
         if (!this.currentData) {
           this.router.navigate(['../'], {relativeTo: this.activeRoute});
@@ -66,6 +72,10 @@ export class RouteDetailComponent implements OnInit {
     });
   }
 
+  get locates(): FormArray {
+    return this.rform.get('locates') as FormArray;
+  }
+
   async submitForm() {
     for (const i of Object.keys(this.rform.controls)) {
       this.rform.controls[i].markAsDirty();
@@ -74,6 +84,19 @@ export class RouteDetailComponent implements OnInit {
     if (!this.rform.valid) { return; }
 
     const value = this.rform.value;
+    this.rform.value.locates = this.rform.value.locates.filter((item) => item.locateId && item.ArriveTime);
+    if (this.rform.value.locates) {
+      this.rform.value.locates = this.rform.value.locates.sort((a, b) => {
+        if (a.ArriveTime > b.ArriveTime) {
+          return 1;
+        } else if (a.ArriveTime < b.ArriveTime) {
+          return -1;
+        }
+        return 0;
+      }).map((item) => ({...item, ArriveTime: (item.ArriveTime as Date).toISOString()}));
+    }
+
+    //.map((item) => ({...item, ArriveTime: (item.ArriveTime as Date).toISOString()})
     value.ArriveTime = value.ArriveTime.toISOString();
     value.DepartureTime = value.DepartureTime.toISOString();
     this.isLoading = true;
@@ -85,5 +108,14 @@ export class RouteDetailComponent implements OnInit {
   }
 
 
+  removeField(index) {
+    this.locates.removeAt(index);
+  }
 
+  addField() {
+    this.locates.push(this.fb.group({ locateId: [''], ArriveTime: [new Date()] }));
+  }
+  addFieldValue(data) {
+    this.locates.push(this.fb.group({ locateId: [data.locateId], ArriveTime: [new Date(data.ArriveTime)] }));
+  }
 }

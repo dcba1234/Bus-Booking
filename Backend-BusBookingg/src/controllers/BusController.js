@@ -92,8 +92,6 @@ module.exports = {
   },
   delete: (req, res) => {
     let sql = `UPDATE ${table} SET IsEnable = 0 WHERE Id = ?`;
-    console.log(req.params.id);
-    
     db.query(sql, [req.params.id], (err, response) => {
       if (err) throw err;
       res.json({ message: "Del" });
